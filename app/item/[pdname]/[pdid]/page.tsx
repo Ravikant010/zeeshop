@@ -34,7 +34,7 @@ export default async function Page({ params }: Props) {
                     <div className='lg:text-[24px] my-4'>{pd && pd.price} </div>
                     <div className='text-lg flex  lg:full justify-between items-center font-semibold'>select size <div className='flex-1 flex pl-10'>{pd && pd.sizes.map((e: string) => <Button key={e} className='w-14 h-14 rounded-full border-2 flex items-center justify-center mr-6 text-sm font-normal bg-transparent text-black  hover:border-[#FF527B] hover:bg-transparent'>{e.split(".")[0]} </Button>)}</div></div>
                     <div className='grid grid-cols-2 gap-2 mt-6'>
-                        <Button className='py-6 font-semibold'>Add To Cart</Button>     <Button className='py-6 font-semibold'>Buy</Button></div>
+                        <Button className='py-6 font-semibold'>Add To Cart</Button>     <Link href='/checkout' className='w-full'><Button className='py-6 font-semibold w-full'>Buy</Button></Link> </div>
                     <div className='mt-6 lg:text-lg py-2 font-semibold'>product details</div>
                     <Separator orientation='horizontal' />
                     <p className='py-2'>
@@ -71,7 +71,7 @@ export default async function Page({ params }: Props) {
                                     <p className='my-2'>
                                         {e.comment}
                                     </p>
-                                  <div  className='w-full text-right text-sm'>  {e.date}</div>
+                                    <div className='w-full text-right text-sm'>  {e.date}</div>
                                 </div>)
                             }
                         </ScrollArea>

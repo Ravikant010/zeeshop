@@ -10,7 +10,8 @@ export default async function Home() {
   const session = await auth()
   const Brands = await getBrands()
   const items = await getFeedItems()
-  console.log(items)
+  console.log('session',session)
+
   if(session &&  items)
     console.log(session?.user)
   return (
@@ -28,7 +29,7 @@ export default async function Home() {
     <section className="lg:grid-cols-5 grid w-full border border-black border-t-0">
       {items && items.map((e:Product, index:number) => (
         // <div key={e} className="bg-red-500 h-[300px] flex flex-col">
-        //   {e}
+      //   {e}
         //   <Button className="w-4/5 mx-auto rounded-full bg-[#ADC5A08]">Add To Cart</Button>
         // </div>
      
