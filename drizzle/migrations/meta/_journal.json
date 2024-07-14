@@ -36,6 +36,13 @@
       "when": 1720089096300,
       "tag": "0004_wet_mandrill",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1720968842282,
+      "tag": "0005_stiff_blur",
+      "breakpoints": true
     }
   ]
 }
