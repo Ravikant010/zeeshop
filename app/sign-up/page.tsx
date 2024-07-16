@@ -14,25 +14,31 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import {  registerUserUseCase, signUpAction } from "./action";
 import Link from "next/link";
 // Ensure this path is correct
-const formSchema = z.object({
-    dob: z.
-        date({
-            required_error: "A date of birth is required.",
-        }),
-    email: z
-        .string()
-        .email({ message: "Write a valid email address" }),
-    password: z
-        .string()
-        .min(8, { message: "Password length should be minimum of 8 characters long" })
-        .max(255, { message: "Password length should be maximum of 255 characters long" }),
-    username: z
-        .string()
-        .min(5)
-        .max(255),
-});
+export const formSchema = z.object({
+	username: z.string()
+	  .min(3, "Username must be at least 3 characters long")
+	  .max(30, "Username must not exceed 30 characters")
+	  .regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores"),
+	
+	email: z.string()
+	  .email("Invalid email address"),
+	
+	password: z.string()
+	  .min(8, "Password must be at least 8 characters long")
+	  .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 
+		"Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
+	
+	dob: z.string()
+
+	  .refine((dob) => {
+		const date = new Date(dob);
+		return !isNaN(date.getTime());
+	  }, "Invalid date format. Please use YYYY-MM-DD")
+	 
+  });
 export default function Page() {
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -40,17 +46,17 @@ export default function Page() {
             username: "",
             email: "",
             password: "",
-            dob: new Date(),
+            dob: '',
         },
     });
     const [profile, setProfile] = useState(false);
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        setProfile(true);
-        console.log("Form Submitted");
-        console.log(values);
-    }
+    // function onSubmit(values: z.infer<typeof formSchema>) {
+ 
+    // }
     const setDate = (date: Date) => {
-        form.setValue('dob', date);
+        const dateString = date.toISOString().split('T')[0];
+        form.setValue('dob', dateString);
+        console.log(form.getValues('dob'))
     };
     const userProfileRef = React.useRef<HTMLInputElement | null>(null)
     function InvokeImageINput() {
@@ -72,12 +78,34 @@ export default function Page() {
                     filesWithBase64.push({ name: file.name, base64: reader.result as string });
                     if (filesWithBase64.length === filesArray.length) {
                         setUserProfile(filesWithBase64);
+                     
                         console.log(filesWithBase64);
                     }
                 };
             });
         }
     }
+     async function onSubmit(values: z.infer<typeof formSchema>) {
+      
+        try {
+            if (!userProfile || !userProfile[0] || !userProfile[0].base64) {
+                throw new Error('User profile image is missing');
+              }
+
+          const result = await signUpAction({...values,image:userProfile[0].base64});
+          if (result.success) {
+            console.log('Signed up successfully. User ID:', result.data?.userId);
+            // Handle successful signup
+          } else {
+            console.error('Signup failed:', result.error || 'Unknown error');
+            // Handle signup failure
+          }
+        } catch (error) {
+          console.error('Unexpected error:', error);
+          // Handle unexpected errors
+        }
+    }
+
     React.useEffect(() => {
         console.log(userProfile)
     }, [userProfile])
@@ -99,7 +127,10 @@ export default function Page() {
                 </div>
                 <div className="w-full flex justify-between items-center flex-col space-y-4">
                     {!userProfile ? <Button className="w-full" >Skip</Button> :
-                        <Button className="w-full h-10" >Submit</Button>
+                        <Button className="w-full h-10"onClick={()=>{
+                                    onSubmit(form.getValues())
+                                    console.log(form.getValues())
+                        }} >Submit</Button>
                     }
                 </div>
             </div>
@@ -108,7 +139,7 @@ export default function Page() {
     return (
         <div className="flex justify-center items-center h-screen flex-col space-y-4 text-start">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={form.handleSubmit(()=>setProfile(true))} className="space-y-4">
                     <FormField
                         control={form.control}
                         name="username"
@@ -169,6 +200,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { writeProfileOnServer } from "@/use-cases/write-profile-image-server";
+
 
 export function DatePickerDemo({ setDate }: {
     setDate: (date: Date) => void

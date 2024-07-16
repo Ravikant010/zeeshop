@@ -20,11 +20,10 @@ export const accountTypeEnum = ["email", "google", "github"] as const;
 
 export const users = pgTable("users", {
 	id: serial('id').primaryKey(),
-  name: text("name"),
+  username: text("name").unique(),
   email: text("email").notNull(),
   dob: date('dob'),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image"),
 });
 
 export const accounts = pgTable('accounts', {
@@ -49,7 +48,7 @@ export const magicLinks = pgTable('magic_links', {
 
 
 export const verifyEmailTokens = pgTable('verify_email_tokens', {
-  id: serial('id').primaryKey(),
+  id: text('id').primaryKey(),
   userId: integer('user_id')
     .references(() => users.id, { onDelete: 'cascade' })
     .notNull()
@@ -69,14 +68,22 @@ export const profiles = pgTable('profile', {
   bio: text('bio').notNull().default(''),
 });
 
+// export const sessions = pgTable('session', {
+//   id: text('id').primaryKey(),
+//   userId: integer('user_id')
+//     .notNull()
+//     .references(() => users.id, { onDelete: 'cascade' }),
+//   expiresAt: integer('expires_at').notNull(),
+// });
 
-export const sessions = pgTable("user_session", {
+export const sessions = pgTable("session", {
 	id: text("id").primaryKey(),
-	userId: text("userId")
-		.notNull()
-		.references(() => users.id),
+  userId: integer("user_id")  // Changed to text to match Lucia's expectations
+  .notNull()
+  .references(() => users.id, { onDelete: 'cascade' }),
+
 	expiresAt: timestamp("expires_at", {
-		withTimezone: true,
+    withTimezone: true,
 		mode: "date"
 	}).notNull()
 });
@@ -125,6 +132,15 @@ export const payments = pgTable('payments', {
   status: varchar('status', { length: 50 }).notNull(),
 });
 
+export const resetTokens = pgTable("reset_tokens", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .unique()
+    .notNull(),
+  token: text("token"),
+  tokenExpiresAt: timestamp("token_expires_at").notNull(),
+});
 
 export type User = typeof users.$inferSelect;
 export type Profile = typeof profiles.$inferSelect;

@@ -3,12 +3,13 @@ import { User, accounts, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import crypto from "crypto"
 import { getAccountByUserId } from "./account";
+import { UserId } from "@/use-cases/types";
 const ITERATIONS = 10000
 const MAGIC_LINK_TOKEN_TTL = 1000 * 60 * 5
-export async function deleteUser(userId: number) {
+export async function deleteUser(userId: UserId) {
     await db.delete(users).where(eq(users.id, userId));
 }
-export async function getUser(userId: number) {
+export async function getUser(userId: UserId) {
     const user = await db.select().from(users).where(eq(users.id, userId)).execute();
     return user[0] || null;
 }
@@ -28,9 +29,11 @@ export async function hashPassword(plainTextPassword: string, salt: string) {
         )
     })
 }
-export async function createUser(email: string) {
+export async function createUser(email: string, username: string, dob:string) {
     const [user] = await db.insert(users).values({
+        username,
         email,
+        dob
     }).returning()
     return user;
 }
@@ -45,6 +48,8 @@ export async function createMagicUser(email: string) {
     }).returning()
     return user;
 }
+
+
 export async function verifyPassword(email: string, plainTextPassword: string) {
     const user = await getUserByEmail(email);
     if (!user)
