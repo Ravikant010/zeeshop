@@ -83,7 +83,7 @@ import { createAccount } from '@/data-access/account';
 import { createProfile } from '@/data-access/profile';
 import { createUser, getUserByEmail } from '@/data-access/users';
 import { createVerifyEmailToken } from '@/data-access/verify-email';
-import { applicationName } from '@/lib/app-config';
+import { afterLoginUrl, applicationName } from '@/lib/app-config';
 import { sendEmail } from '@/lib/email';
 import { generateRandomName } from '@/lib/names';
 import {VerifyEmail} from "@/email/verify-email"
@@ -91,31 +91,19 @@ import {VerifyEmail} from "@/email/verify-email"
 // import { createServerActionProcedure } from "zsa";
 import { z } from 'zod';
 import { registerUserUseCase } from '@/use-cases/users';
-
-
-
+import { setSession } from '@/lib/session';
+import { redirect } from "next/navigation";
 
 
 
 export async function signUpAction({ email, username, dob, password, image }: { email: string, password: string, username: string, dob: string , image:string}) {
 	try {
-		// Validate input
-
-
-		// Call registerUserUseCase wBecomeHacker2025@ith email and password
 		const user = await registerUserUseCase({ email, username, dob, password, image });
-
-		// You might want to do something with the username and dob here,
-		// like updating the user's profile
-
-		return { success: true, data: { userId: user.id } };
+		console.log("user id", user)
+		await setSession(user.id)
+		return user.id
+		// return redirect(afterLoginUrl)
 	} catch (error) {
-		//   if (error instanceof z.ZodError) {
-		// 	return { success: false, errors: error.errors };
-		//   }
-		//   if (error instanceof EmailInUseError) {
-		// 	return { success: false, error: 'Email is already in use' };
-		//   }
 		console.error('Unexpected error during sign up:', error);
 		return { success: false, error: 'An unexpected error occurred' };
 	}

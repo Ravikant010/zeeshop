@@ -48,7 +48,7 @@ export const magicLinks = pgTable('magic_links', {
 
 
 export const verifyEmailTokens = pgTable('verify_email_tokens', {
-  id: text('id').primaryKey(),
+id: serial('id').primaryKey(),
   userId: integer('user_id')
     .references(() => users.id, { onDelete: 'cascade' })
     .notNull()
@@ -99,7 +99,7 @@ export const sessions = pgTable("session", {
 
 export const addresses = pgTable('addresses', {
   addressId: serial('address_id').primaryKey(),
-  userId: text("userId").references(() => users.id, {onDelete: "cascade"}).notNull(),
+  userId: integer("userId").references(() => users.id, {onDelete: "cascade"}).notNull(),
   streetAddress: varchar('street_address', { length: 255 }).notNull(),
   city: varchar('city', { length: 100 }).notNull(),
   state: varchar('state', { length: 100 }).notNull(),
@@ -109,7 +109,7 @@ export const addresses = pgTable('addresses', {
 // Orders table
 export const orders = pgTable('orders', {
   orderId: serial('order_id').primaryKey(),
-  userId: text("userId").references(() => users.id, {onDelete: "cascade"}).notNull(),
+  userId: integer("userId").references(() => users.id, {onDelete: "cascade"}).notNull(),
   addressId: integer('address_id').references(() => addresses.addressId).notNull(),
   orderDate: timestamp('order_date').defaultNow().notNull(),
   status: varchar('status', { length: 50 }).notNull(),

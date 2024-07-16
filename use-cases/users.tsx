@@ -61,6 +61,7 @@ export async function deleteUserUseCase(
   }
 
 export async function registerUserUseCase({ email, username, dob, password , image}: { email: string, password: string, username: string, dob: string , image:string}) {
+  
 	const existingUser = await getUserByEmail(email);
 	if (existingUser) {
 		throw  Error("email exist")

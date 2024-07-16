@@ -1,3 +1,3 @@
 export const applicationName = "ZeeShop";
 
-export const afterLoginUrl = "/dashboard";
+export const afterLoginUrl = "/";

@@ -6,14 +6,22 @@ import { Item } from "@/components/Item";
 import { getBrands, getFeedItems } from "@/fetch/fetchAPIS";
 import MidBar from "@/components/MidBar";
 import { Product } from "@/interfaces/interface";
+import { getCurrentUser } from "@/lib/session";
+import { redirect } from "next/navigation";
+import { getProfile } from "@/data-access/profile";
 export default async function Home() {
-  const session = await auth()
+  // const session = await auth()
+  const user = await getCurrentUser();
+
+if(!user)
+  redirect("/login")
+
   const Brands = await getBrands()
   const items = await getFeedItems()
-  console.log('session',session)
+  // console.log('session',session)
 
-  if(session &&  items)
-    console.log(session?.user)
+  // if(session &&  items)
+  //   console.log(session?.user)
   return (
     <main className="flex min-h-screen flex-col items-center max-h-auto">
     <section className="grid grid-cols-2 w-full h-[600px] border border-black">

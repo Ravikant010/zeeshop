@@ -4,6 +4,7 @@ import "./globals.css";
 import TopNav from "@/components/topNav";
 import {SessionProvider} from "@/lib/lucia_session_provider"
 import {validateRequest} from "@/lib/validate_lucia_user"
+import { ServerComponentTopNavBar } from "@/components/ServerAvatar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,10 +20,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <TopNav />
-      <SessionProvider value={session}>
+      <ServerComponentTopNavBar />
+    
         {children}
-        </SessionProvider></body>
+   
+        </body>
     </html>
   );
 }

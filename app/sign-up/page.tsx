@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import {  registerUserUseCase, signUpAction } from "./action";
+
 import Link from "next/link";
 // Ensure this path is correct
 export const formSchema = z.object({
@@ -40,6 +40,7 @@ export const formSchema = z.object({
 	 
   });
 export default function Page() {
+    const router = useRouter()
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -91,15 +92,10 @@ export default function Page() {
             if (!userProfile || !userProfile[0] || !userProfile[0].base64) {
                 throw new Error('User profile image is missing');
               }
+         const user_id =  await signUpAction({...values,image:userProfile[0].base64});
+         if(user_id)
+return router.push(afterLoginUrl)
 
-          const result = await signUpAction({...values,image:userProfile[0].base64});
-          if (result.success) {
-            console.log('Signed up successfully. User ID:', result.data?.userId);
-            // Handle successful signup
-          } else {
-            console.error('Signup failed:', result.error || 'Unknown error');
-            // Handle signup failure
-          }
         } catch (error) {
           console.error('Unexpected error:', error);
           // Handle unexpected errors
@@ -200,7 +196,10 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { writeProfileOnServer } from "@/use-cases/write-profile-image-server";
+
+import { signUpAction } from "./action";
+import { useRouter } from 'next/navigation'
+import { afterLoginUrl } from "@/lib/app-config";
 
 
 export function DatePickerDemo({ setDate }: {

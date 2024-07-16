@@ -7,9 +7,14 @@ import Link from 'next/link'
 import UserAvatar from './UserAvatar'
 import { SessionProvider } from "next-auth/react"
 import SideMenu from './SideMenu'
-type Props = {}
+type Props = {
+  username: string,
+  userId: number,
+  imageBase64:string
+}
 
-function TopNav({}: Props) {
+
+function TopNav({username, userId, imageBase64}: Props) {
     const pathname = usePathname()
     console.log(pathname.split('/'))
     if(pathname.split('/')[1]=== 'sign-up' || pathname.split('/')[1]=== 'sign-in'  || pathname.split('/')[1]=== 'account' )
@@ -23,10 +28,8 @@ ZeeShop
 {
 ["Category", "Brands", "shop active", "about", "search", "cart"].map(e=> e== "Brands" ? <BrandsPopover text={e} key = {e}/> :  e == "Category" ? <CategoryPopover text={e} key={e}/> : <Link href={e} key={e} className="ml-8" >{e}</Link>)
 }
-<SessionProvider>
-  <Link href={'/account'}><UserAvatar/></Link>
 
-</SessionProvider>
+  <Link href={'/account'}><UserAvatar username={username} userId={userId} imageBase64={imageBase64}/></Link>
 </div>
     </div>
     </div>

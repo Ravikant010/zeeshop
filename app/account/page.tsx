@@ -7,11 +7,15 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import SignOut from "@/components/Signout"
+import { getCurrentUser } from '@/lib/session'
+import { getProfile } from '@/data-access/profile'
 type Props = {}
 export default async function page({ }: Props) {
-    const session = await auth()
-    console.log(session)
-    if (session)
+  const user = await getCurrentUser()
+  if(!user)
+   return  <></>
+const profile = await getProfile(user.id)
+    if (user)
         return (
             <div className='w-full min-h-screen flex flex-col items-start justify-normal'>
                 <div className='flex justify-between w-full p-2'>
@@ -27,8 +31,8 @@ export default async function page({ }: Props) {
                     <SignOut />
                 </div>
                 <div className='w-full h-[200px] border-y-[1px] border-black flex items-center px-10 '>
-                    <img src={session.user && session.user.image as string} alt='' width={'100'} height={'100'} className='rounded-full' />
-                    <p className='ml-2 text-lg font-semibold'>{session.user && session.user.name}</p>
+                    <img src={profile.image || ''} alt=''  className='rounded-full h-[100px] w-[100px] cover' />
+                    <p className='ml-2 text-lg font-semibold'>{user.username}</p>
                 </div>
                 <div className="w-full grid grid-cols-2 p-2  content-center bg-[#fdfffc] border-b-[1px]    border-black">
                     <div className=" flex items-center">Your Orders</div>

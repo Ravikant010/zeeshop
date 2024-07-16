@@ -1,6 +1,7 @@
 import { accounts, db, users } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import crypto from "crypto"
+import { UserId } from "@/use-cases/types";
 const ITERATIONS = 10000;
 async function hashPassword(plainTextPassword: string, salt: string) {
     return new Promise<string>((resolve, reject) => {
@@ -17,26 +18,26 @@ async function hashPassword(plainTextPassword: string, salt: string) {
         );
     });
 }
-export async function createAccount(userId: number, password: string) {
-    console.log("password", password)
-    const salt = crypto.randomBytes(128).toString()
-    const hash = await hashPassword(password, salt)
+export async function createAccount(userId: UserId, password: string) {
+    console.log("password", password);
+    const salt =   crypto.randomBytes(128).toString("base64");
+    const hash = await hashPassword(password, salt);
     const [account] = await db.insert(accounts).values({
         userId,
         accountType: "email",
         password: hash,
         salt
-    })
-return account
+    }).returning();
+return account;
 }
-export async function createAccountByGoogle(userId: number, googleId: string) {
+export async function createAccountByGoogle(userId: UserId, googleId: string) {
     await db.insert(accounts).values({
         userId: userId,
         accountType: "google",
         googleId
     })
 }
-export async function updatePassword(userId: number, password: string, trx = db) {
+export async function updatePassword(userId: UserId, password: string, trx = db) {
     const salt = crypto.randomBytes(128).toString('base64');
     const hash = await hashPassword(password, salt);
     await trx.update(accounts).set({

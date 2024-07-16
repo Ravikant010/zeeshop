@@ -1,4 +1,5 @@
-import React from 'react'
+
+import React, { Component, ReactNode } from 'react'
 import {
     Avatar,
     AvatarFallback,
@@ -7,17 +8,23 @@ import {
 import { auth } from '@/auth'
 import { useSession } from 'next-auth/react'
 import { date } from 'drizzle-orm/pg-core'
+import { getCurrentUser } from '@/lib/session'
+import { getProfile } from '@/data-access/profile'
 
-type Props = {}
+type Props = {
+  username: string,
+  userId: number,
+  imageBase64:string
+}
 
-export default  function UserAvatar({ }: Props) {
-  const session = useSession()
- console.log(session)
-    if(session && session.data)
+
+export default async  function UserAvatar({username, userId, imageBase64}:Props) {
+
     return (
       <Avatar className='ml-4'>
-      <AvatarImage src={session?.data.user?.image as string} alt={session?.data.user?.name as string}  className='object-fit h-10 w-10 '/>
-      <AvatarFallback>{session.data.user?.name as string}</AvatarFallback>
+      <AvatarImage src={imageBase64|| ''} alt={username}  className='object-fit h-10 w-10 '/>
+      <AvatarFallback>{username}</AvatarFallback>
     </Avatar>
     )
+    
 }

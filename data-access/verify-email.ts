@@ -2,7 +2,8 @@ import { generateRandomToken } from "@/use-cases/utils";
 import { TOKEN_LENGTH, TOKEN_TTL } from "./magic-links";
 import { db, verifyEmailTokens } from "@/db/schema";
 import { eq } from "drizzle-orm";
-export async function createVerifyEmailToken(userId: number) {
+import { UserId } from "@/use-cases/types";
+export async function createVerifyEmailToken(userId: UserId) {
     const token = await generateRandomToken(TOKEN_LENGTH);
     const tokenExpiresAt = new Date(Date.now() + TOKEN_TTL);
     await db
