@@ -24,21 +24,30 @@
 
 import { NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
+import { getCurrentUser } from '@/lib/session';
+import { getUserAddress } from '@/data-access/address';
+import { redirect } from 'next/navigation'
+import { getUser } from '@/data-access/users';
 
 export async function POST(request: Request) {
   try {
     const { amount } = await request.json();
-
+    const user = await getCurrentUser() as {username:string, id:number}
+    if (!user)
+      return redirect("/sign-in")
+    const address = await getUserAddress(user.id)
+    console.log(user)
+const User = await getUser(user.id)
     // Simulate customer data for test mode
     const testCustomerData = {
-      email: 'test@example.com',
-      name: 'Test Customer',
+      email: User.email,
+      name: user.username,
       address: {
-        line1: '123 Test Street',
-        city: 'Test City',
-        state: 'Test State',
-        postal_code: '123456',
-        country: 'IN', // Using India as the country code
+        line1: address.streetAddress,
+        city: address.city,
+        state: address.state,
+        postal_code: address.postalCode,
+        country: address.country, // Using India as the country code
       },
     };
 

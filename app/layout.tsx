@@ -20,9 +20,9 @@ export default async function RootLayout({
   const session = await validateRequest() 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className+"w-full"}>
       <ServerComponentTopNavBar />
-    <div className="top-14 absolute">
+    <div className="top-14 absolute w-full">
         {children}
         </div>
         <Toaster />

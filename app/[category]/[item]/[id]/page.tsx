@@ -41,7 +41,8 @@ export default async function Page({ params }: Props) {
                     <div className='grid grid-cols-2 gap-2 mt-6'>
                         <Button className='py-6 font-semibold'>Add To Cart</Button>        <Link href= {`/address/${pd.product_id}`} className='w-full'>
 
-                        <Button className='py-6 font-semibold w-full'>Buy</Button></Link></div>
+                        <Button className='py-6 font-semibold w-full'>Buy</Button></Link>
+                        </div>
                     <div className='mt-6 lg:text-lg py-2 font-semibold'>product details</div>
                     <Separator orientation='horizontal' />
                     <p className='py-2'>
@@ -56,7 +57,9 @@ export default async function Page({ params }: Props) {
                     <div className='font-semibold mb-2'>Specifications</div>
                     <div className='grid grid-cols-2 gap-x-2 gap-y-4'>
                         {
-                            pd && Object.keys(pd.item_spec).map(e => <div className='flex flex-col justify-center items-start w-full border-b-[1px]'><p className='text-zinc-500 text-sm'>{e}</p> <p>{pd?.item_spec[e]}</p></div>)
+                            pd && Object.keys(pd.item_spec).map(e => <div className='flex flex-col justify-center items-start w-full border-b-[1px]'><p className='text-zinc-500 text-sm'>{e}</p> <p>{
+                                //@ts-ignore
+                                pd?.item_spec[e]}</p></div>)
                         }
                     </div>
                     <div className='my-2'>

@@ -19,7 +19,7 @@ function TopNav({username, userId, imageBase64}: Props) {
     console.log(pathname.split('/'))
     if(pathname.split('/')[1]=== 'sign-up' || pathname.split('/')[1]=== 'sign-in'  || pathname.split('/')[1]=== 'account' )
         return null
-  return (          <div className="fixed w-full z-20 bg-[#fdfffc] border-b-[1px] border-black">
+  return (          <div className="fixed w-full z-20 bg-[#fdfffc] border-b-[1px] border-black top-0">
     <div className="w-full py-2 bg-red-0 grid  grid-cols-2 place-content-center text-lg ">
 <div className=" px-2">  
 ZeeShop

@@ -54,7 +54,7 @@ console.log(params.pdId)
     },
   })
   return (
-    <div className='pt-12 px-20 grid grid-cols-2 gap-x-5 place-content-between' >
+    <div className='pt-12 px-20 grid grid-cols-2 gap-x-5 place-content-start max-w-[1000px]' >
       <div>
 
         <Image src={pd?.image_urls[0] || ''} width={500}
@@ -62,7 +62,7 @@ console.log(params.pdId)
           alt="Picture of the author" />
 
       </div>
-      <div className='flex flex-col  text-lg' >
+      <div className='flex flex-col  text-lg capitalize' >
         <section className='mb-10'>
         <h1>
           {pd?.brand}
@@ -70,10 +70,14 @@ console.log(params.pdId)
         <h2>
           {pd?.pdp_name}
         </h2>
-        {pd?.pd_dscnt_price ?
-        <h2 className='text-red-500'>discounted price {pd?.pd_dscnt_price} <br/> {pd?.price}</h2>
-        :<h2 className='text-red-500'>price {pd?.price}</h2>
+        <h2 ><b>quantity: </b>{localStorage.getItem("quantity")}</h2>
+        {pd?.pd_dscnt_price &&
+        <h2 className='text-red-500'>discounted price {pd?.pd_dscnt_price} <br/></h2>
+      
 }
+
+        <h2><b>pay:</b> <span className='text-red-500'>{pd && Number(pd.price.replace("₹", "")) * Number(localStorage.getItem("quantity"))}</span></h2>
+       
 </section>
 {pd && 
         <Elements stripe={stripePromise} options={options} >

@@ -9,6 +9,8 @@ import { extractRating } from '@/lib/extracRating'
 import { getItemById, getItemByCategory, getItemsByBrands } from '@/fetch/fetchAPIS'
 import { Item } from '@/components/Item'
 import { Comment, Product } from '@/interfaces/interface'
+import Quantity from '@/components/quantity'
+import { SizeSelector } from '@/components/Sizes'
 
 type Props = { params: { pdname: string, pdid: string } }
 export default async function Page({ params }: Props) {
@@ -33,7 +35,9 @@ export default async function Page({ params }: Props) {
                         : null}
                     <Separator orientation='horizontal' />
                     <div className='lg:text-[24px] my-4'>{pd && pd.price} </div>
-                    <div className='text-lg flex  lg:full justify-between items-center font-semibold'>select size <div className='flex-1 flex pl-10'>{pd && pd.sizes.map((e: string) => <Button key={e} className='w-14 h-14 rounded-full border-2 flex items-center justify-center mr-6 text-sm font-normal bg-transparent text-black  hover:border-[#FF527B] hover:bg-transparent'>{e.split(".")[0]} </Button>)}</div></div>
+                    <SizeSelector sizes={pd.sizes} />
+                    {/* <div className='text-lg flex  lg:full justify-between items-center font-semibold'>select size <div className='flex-1 flex pl-10'>{pd && pd.sizes.map((e: string) => <Button key={e} className='w-14 h-14 rounded-full border-2 flex items-center justify-center mr-6 text-sm font-normal bg-transparent text-black  hover:border-[#FF527B] hover:bg-transparent'>{e.split(".")[0]} </Button>)}</div></div> */}
+                    <Quantity />
                     <div className='grid grid-cols-2 gap-2 mt-6'>
                         <Button className='py-6 font-semibold'>Add To Cart</Button>   
                          

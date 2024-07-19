@@ -130,6 +130,7 @@ export const orderItems = pgTable('order_items', {
   orderItemId: serial('order_item_id').primaryKey(),
   // orderId: integer('order_id').references(() => orders.orderId).notNull(),
   productId: integer('product_id').notNull(),
+  size: text("size").notNull(),
   quantity: integer('quantity').notNull(),
   price: integer("price").notNull()
 });

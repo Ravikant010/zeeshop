@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { Minus, Plus } from 'lucide-react'
@@ -21,14 +21,21 @@ export default function Quantity({
   const [quantity, setQuantity] = useState(initialQuantity)
 
   const handleQuantityChange = (newQuantity: number) => {
+    
     if (newQuantity >= minQuantity && newQuantity <= maxQuantity) {
       setQuantity(newQuantity)
       onQuantityChange?.(newQuantity)
+  
     }
-  }
 
+  }
+useEffect(()=>{
+  localStorage.setItem("quantity", String(quantity))
+}, [quantity])
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
     const newQuantity = parseInt(e.target.value, 10)
+    
     if (!isNaN(newQuantity)) {
       handleQuantityChange(newQuantity)
     }

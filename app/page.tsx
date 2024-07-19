@@ -23,7 +23,7 @@ export default async function Home() {
   // if(session &&  items)
   //   console.log(session?.user)
   return (
-    <main className="flex min-h-screen flex-col items-center max-h-auto">
+    <main className="flex min-h-screen flex-col items-center max-h-auto w-full">
     <section className="grid grid-cols-2 w-full h-[600px] border border-black">
       <div className="text-24 leading-36 uppercase flex flex-col justify-between p-20">
         <p className="leading-36 text-lg font-medium">Active</p>

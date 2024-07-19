@@ -19,6 +19,7 @@ export function SizeSelector({ sizes }: SizeSelectorProps) {
 
   const handleSizeSelect = (size: string) => {
     selectSize(size);
+    localStorage.setItem("size", size)
     // if (onSizeSelect) {
     //   onSizeSelect(size);
     // }
