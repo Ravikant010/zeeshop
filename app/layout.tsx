@@ -5,6 +5,7 @@ import TopNav from "@/components/topNav";
 import {SessionProvider} from "@/lib/lucia_session_provider"
 import {validateRequest} from "@/lib/validate_lucia_user"
 import { ServerComponentTopNavBar } from "@/components/ServerAvatar";
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,9 +22,10 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
       <ServerComponentTopNavBar />
-    
+    <div className="top-14 absolute">
         {children}
-   
+        </div>
+        <Toaster />
         </body>
     </html>
   );

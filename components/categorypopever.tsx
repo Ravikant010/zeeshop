@@ -1,3 +1,4 @@
+
 import {
     HoverCard,
     HoverCardContent,
@@ -6,7 +7,7 @@ import {
 import { category } from "@/lib/category";
 import Link from "next/link";
 type Props = { text: string }
-export default async function CategoryPopover({ text }: Props) {
+export default  function CategoryPopover({ text }: Props) {
     return (
         <HoverCard >
             <HoverCardTrigger className="ml-4">{text}</HoverCardTrigger>

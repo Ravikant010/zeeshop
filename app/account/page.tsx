@@ -1,3 +1,4 @@
+
 import { auth } from '@/auth'
 import MidBar from '@/components/MidBar'
 import { Button } from '@/components/ui/button'
@@ -9,6 +10,7 @@ import React from 'react'
 import SignOut from "@/components/Signout"
 import { getCurrentUser } from '@/lib/session'
 import { getProfile } from '@/data-access/profile'
+import { AddressForm } from '@/components/adressForm'
 type Props = {}
 export default async function page({ }: Props) {
   const user = await getCurrentUser()
@@ -19,6 +21,7 @@ const profile = await getProfile(user.id)
         return (
             <div className='w-full min-h-screen flex flex-col items-start justify-normal'>
                 <div className='flex justify-between w-full p-2'>
+                  
                     <Link href={'/'}>
                         <Button variant={'link'} className='capitalize'>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#000000"} fill={"none"} className='mr-2'>

@@ -8,6 +8,7 @@ import {
   serial,
   varchar,
   date,
+  pgEnum,
 } from "drizzle-orm/pg-core"
 import postgres from "postgres"
 import { drizzle } from "drizzle-orm/postgres-js"
@@ -98,7 +99,7 @@ export const sessions = pgTable("session", {
 
 
 export const addresses = pgTable('addresses', {
-  addressId: serial('address_id').primaryKey(),
+  id: serial('address_id').primaryKey(),
   userId: integer("userId").references(() => users.id, {onDelete: "cascade"}).notNull(),
   streetAddress: varchar('street_address', { length: 255 }).notNull(),
   city: varchar('city', { length: 100 }).notNull(),
@@ -107,20 +108,30 @@ export const addresses = pgTable('addresses', {
   country: varchar('country', { length: 100 }).notNull(),
 });
 // Orders table
+export const OrderStatus = pgEnum('order_status', [
+  'pending',
+  'ordered',
+  'processing',
+  'shipped',
+  'delivered',
+  'cancelled'
+]);
+
 export const orders = pgTable('orders', {
   orderId: serial('order_id').primaryKey(),
+  orderItemId: integer("order_item_id").references(()=>orderItems.orderItemId).notNull(),
   userId: integer("userId").references(() => users.id, {onDelete: "cascade"}).notNull(),
-  addressId: integer('address_id').references(() => addresses.addressId).notNull(),
+  addressId: integer('address_id').references(() => addresses.id).notNull(),
   orderDate: timestamp('order_date').defaultNow().notNull(),
-  status: varchar('status', { length: 50 }).notNull(),
+  status: OrderStatus('status').notNull(),
 });
 // OrderItems table
 export const orderItems = pgTable('order_items', {
   orderItemId: serial('order_item_id').primaryKey(),
-  orderId: integer('order_id').references(() => orders.orderId).notNull(),
+  // orderId: integer('order_id').references(() => orders.orderId).notNull(),
   productId: integer('product_id').notNull(),
   quantity: integer('quantity').notNull(),
-  price: varchar('price', { length: 50 }).notNull(),
+  price: integer("price").notNull()
 });
 // Payments table
 export const payments = pgTable('payments', {
@@ -144,7 +155,7 @@ export const resetTokens = pgTable("reset_tokens", {
 
 export type User = typeof users.$inferSelect;
 export type Profile = typeof profiles.$inferSelect;
-
+export type Address = typeof addresses.$inferSelect; 
 // export const users = pgTable("user", {
 //   id: text("id")
 //     .primaryKey()

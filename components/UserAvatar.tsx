@@ -18,7 +18,7 @@ type Props = {
 }
 
 
-export default async  function UserAvatar({username, userId, imageBase64}:Props) {
+export default   function UserAvatar({username, userId, imageBase64}:Props) {
 
     return (
       <Avatar className='ml-4'>

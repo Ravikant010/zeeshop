@@ -6,7 +6,7 @@ server: {
     DATABASE_URL: z.string().min(1),
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
-    STRIPE_PUBLISHABLE_KEY: z.string().min(1),
+ 
     STRIPE_SECRET_KEY: z.string().min(1),
     STRIPE_WEBHOOK_SECRET: z.string().min(1),
     HOST_NAME: z.string().min(1),
@@ -16,13 +16,15 @@ server: {
     EMAIL_SERVER_USER: z.string().min(1),
     EMAIL_SERVER_PASSWORD: z.string().min(1)
     
-}, client : {},
+}, client : {
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
+},
 runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     STRIPE_SECRET_KEY:process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_SECRET_KEY,
     HOST_NAME: process.env.HOST_NAME,

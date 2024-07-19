@@ -11,10 +11,10 @@ import { redirect } from "next/navigation";
 import { getProfile } from "@/data-access/profile";
 export default async function Home() {
   // const session = await auth()
-  const user = await getCurrentUser();
+//   const user = await getCurrentUser();
 
-if(!user)
-  redirect("/login")
+// if(!user)
+//   redirect("/login")
 
   const Brands = await getBrands()
   const items = await getFeedItems()

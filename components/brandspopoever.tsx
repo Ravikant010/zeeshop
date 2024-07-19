@@ -1,3 +1,4 @@
+
 import {
     HoverCard,
     HoverCardContent,
@@ -7,7 +8,7 @@ import { getBrands } from "@/fetch/fetchAPIS";
 import { Brands } from "@/lib/brands";
 import Link from "next/link";
 type Props = { text: string }
-export default async function BrandsPopover({ text }: Props) {
+export default  function BrandsPopover({ text }: Props) {
         return (
             <HoverCard >
                 <HoverCardTrigger className="ml-4">{text}</HoverCardTrigger>

@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { OAuth2RequestError } from "arctic";
 import { googleAuth } from "@/lib/auth";
 import { createGoogleUserUseCase } from "@/use-cases/users";
-import { getAccountByGoogleIdUseCase } from "@/use-cases/accounts";
+// import { getAccountByGoogleIdUseCase } from "@/use-cases/accounts";
 import { afterLoginUrl } from "@/lib/app-config";
 import { setSession } from "@/lib/session";
 
@@ -41,17 +41,17 @@ export async function GET(request: Request): Promise<Response> {
     );
     const googleUser: GoogleUser = await response.json();
 
-    const existingAccount = await getAccountByGoogleIdUseCase(googleUser.sub);
+    // const existingAccount = await getAccountByGoogleIdUseCase(googleUser.sub);
 
-    if (existingAccount) {
-      await setSession(existingAccount.userId);
-      return new Response(null, {
-        status: 302,
-        headers: {
-          Location: afterLoginUrl,
-        },
-      });
-    }
+    // if (existingAccount) {
+    //   await setSession(existingAccount.userId);
+    //   return new Response(null, {
+    //     status: 302,
+    //     headers: {
+    //       Location: afterLoginUrl,
+    //     },
+    //   });
+    // }
 
     const userId = await createGoogleUserUseCase(googleUser);
     await setSession(userId);
