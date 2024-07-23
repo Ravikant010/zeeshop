@@ -1,94 +1,128 @@
 "use client"
-import React, { useEffect, useState } from 'react'
-import { AddressForm } from './adressForm'
-import { Elements } from '@stripe/react-stripe-js'
-import CheckoutForm from './CheckoutForm'
-import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js'
-import { Address } from '@/db/schema'
-import { UserId } from '@/use-cases/types'
-import { usePathname, useRouter } from 'next/navigation'
-import { Separator } from '@radix-ui/react-separator'
-import { Button } from './ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import React, { useState } from 'react';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Input } from './ui/input'
-import { Label } from './ui/label'
-import { getItemById } from '@/fetch/fetchAPIS'
-import Image from 'next/image'
-import { Product } from '@/interfaces/interface'
-type Props = {
-  user_address: Address;
-  userId: UserId;
-  pdId: string
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
+import Link from 'next/link';
+
+interface Props {
+  user_address: {
+    streetAddress: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  } | null;
+  userId: string;
+  pdId: string;
 }
 
+export  function CheckComponent({ user_address, userId, pdId }: Props){
+  const [selectedAddress, setSelectedAddress] = useState<"existing" | "new" | ''>('');
+  const [newAddress, setNewAddress] = useState({
+    streetAddress: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    country: ''
+  });
 
-export default function CheckComponent({ user_address, userId, pdId }: Props) {
-  const [showForm, setShowForm] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState<"db" | "add new" | ''>('');
-  console.log(user_address)
-  const [pd, setPd] = useState<Product>()
-  useEffect(() => {
-    async function fetchPd() {
-      const pd = await getItemById("", pdId)
-      setPd(pd)
-    }
-    fetchPd()
-  }, [])
-
-  function isAddressSelected(type: "db" | "add new") {
-    setSelectedAddress(type)
+  const handleAddressSelection = (type: "existing" | "new") => {
+    setSelectedAddress(type);
   }
-  const router = useRouter()
-  return (
-    <div className='pt-20 min-h-screen px-20'>
-      {
-        selectedAddress === "add new" && <AddressForm userId={userId} pdId={pdId}/>
-      }
-      {/* {
-        selectedAddress === "db" && <>
-          <h1>{pd?.brand}</h1>
-          <Image src={pd?.image_urls[0] || ''} width={500}
-            height={500}
-            alt="Picture of the author" />
-        </>
-      } */}
-      {!selectedAddress && user_address ?
-        <div className='w-full h-full grid grid-cols-2 gap-x-5'>
-          <Card className="w-[350px]  hover:border-green-500 hover:border-2" onClick={() => {
-        router.push(`/product/payment/${pdId}`)
-          }}>
-            <CardHeader>
-              <CardTitle>Your Addresses</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className='capitalize list-none'>
-                <li>street address: {user_address.streetAddress}</li>
-                <li>city: {user_address.city}</li>
-                <li>state: {user_address.state}</li>
-                <li>postal code: {user_address.postalCode}</li>
-                <li>country: {user_address.country}</li>
-              </ul>
-            </CardContent>
-          </Card>
-          <Card className="w-[350px] hover:border-green-500 hover:border-2" onClick={() => {
-            isAddressSelected("add new")
-          }}>
-            <CardHeader className='w-full h-full '>
-              <CardTitle className='text-center  w-full h-full flex items-center justify-center'>Add New</CardTitle>
-            </CardHeader>
-          </Card>
-        </div> :
-        (selectedAddress !== "add new" && selectedAddress !== "db") &&
-        <AddressForm userId={userId} pdId={pdId} />}
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewAddress(prev => ({ ...prev, [name]: value }));
+  }
+
+  const handleSubmit = () => {
+    console.log("Submitting address:", selectedAddress === "new" ? newAddress : user_address);
+    console.log("User ID:", userId);
+    console.log("Product ID:", pdId);
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <CardTitle>Choose Address</CardTitle>
+          <CardDescription>Select an existing address or create a new one</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RadioGroup value={selectedAddress} onValueChange={handleAddressSelection} className="space-y-4">
+            {user_address && (
+              <div>
+                <RadioGroupItem value="existing" id="existing" className="peer sr-only" />
+                <Label
+                  htmlFor="existing"
+                  className="flex flex-col items-start justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                >
+                  <span className="font-semibold w-full text-center mb-2">Use Existing Address</span>
+                  <ul className='capitalize list-none'>
+                    <li>street address: {user_address.streetAddress}</li>
+                    <li>city: {user_address.city}</li>
+                    <li>state: {user_address.state}</li>
+                    <li>postal code: {user_address.postalCode}</li>
+                    <li>country: {user_address.country}</li>
+                  </ul>
+                </Label>
+              </div>
+            )}
+            <div>
+              <RadioGroupItem value="new" id="new" className="peer sr-only" />
+              <Label
+                htmlFor="new"
+                className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+              >
+                <span className="font-semibold">Create New Address</span>
+              </Label>
+            </div>
+          </RadioGroup>
+          {selectedAddress === "new" && (
+            <div className="mt-4 space-y-2">
+              <Input
+                name="streetAddress"
+                placeholder="Street Address"
+                value={newAddress.streetAddress}
+                onChange={handleInputChange}
+              />
+              <Input
+                name="city"
+                placeholder="City"
+                value={newAddress.city}
+                onChange={handleInputChange}
+              />
+              <Input
+                name="state"
+                placeholder="State"
+                value={newAddress.state}
+                onChange={handleInputChange}
+              />
+              <Input
+                name="postalCode"
+                placeholder="Postal Code"
+                value={newAddress.postalCode}
+                onChange={handleInputChange}
+              />
+              <Input
+                name="country"
+                placeholder="Country"
+                value={newAddress.country}
+                onChange={handleInputChange}
+              />
+            </div>
+          )}
+        </CardContent>
+        <CardFooter>
+          
+         <Link href= {`/product/payment/${pdId}`} className="w-full "> <Button onClick={handleSubmit} className="w-full">Proceed to Payment</Button></Link>
+        </CardFooter>
+      </Card>
     </div>
-  )
+  );
 }
+
+export default CheckComponent;

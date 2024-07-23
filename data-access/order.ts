@@ -21,3 +21,8 @@ size
     }).returning()
     return order
 } 
+
+export async function getOrdersByUserId(userId:UserId) {
+    const order = await db.select().from(orders).where(eq(orders.userId, userId))
+    return order;
+}

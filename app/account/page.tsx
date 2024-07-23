@@ -1,49 +1,92 @@
-
 import { auth } from '@/auth'
-import MidBar from '@/components/MidBar'
 import { Button } from '@/components/ui/button'
-import { Combobox } from '@/components/ui/combox'
-import Image from 'next/image'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ChevronLeft, User, Package, Settings, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import SignOut from "@/components/Signout"
 import { getCurrentUser } from '@/lib/session'
 import { getProfile } from '@/data-access/profile'
-import { AddressForm } from '@/components/adressForm'
+import { getOrdersByUserId } from '@/data-access/order'
+import { OrdersTable } from '@/components/OrderTable'
+
 type Props = {}
-export default async function page({ }: Props) {
+
+export default async function ProfilePage({ }: Props) {
   const user = await getCurrentUser()
-  if(!user)
-   return  <></>
-const profile = await getProfile(user.id)
-    if (user)
-        return (
-            <div className='w-full min-h-screen flex flex-col items-start justify-normal'>
-                <div className='flex justify-between w-full p-2'>
-                  
-                    <Link href={'/'}>
-                        <Button variant={'link'} className='capitalize'>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#000000"} fill={"none"} className='mr-2'>
-                                <path d="M4 12L20 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                <path d="M8.99996 17C8.99996 17 4.00001 13.3176 4 12C3.99999 10.6824 9 7 9 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            back to home
-                        </Button>
-                    </Link>
-                    <SignOut />
-                </div>
-                <div className='w-full h-[200px] border-y-[1px] border-black flex items-center px-10 '>
-                    <img src={profile.image || ''} alt=''  className='rounded-full h-[100px] w-[100px] cover' />
-                    <p className='ml-2 text-lg font-semibold'>{user.username}</p>
-                </div>
-                <div className="w-full grid grid-cols-2 p-2  content-center bg-[#fdfffc] border-b-[1px]    border-black">
-                    <div className=" flex items-center">Your Orders</div>
 
+  if (!user) return null
+  const orders= await  getOrdersByUserId(user.id)
+  console.log(orders)
+  const profile = await getProfile(user.id)
 
+  return (
+    <div className='w-full min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 absolute -top-14'>
+      <header className='sticky top-0 z-10 flex justify-between items-center w-full p-4 bg-white/80 backdrop-blur-sm shadow-sm'>
+        <Link href='/' className='h-full w-full'>
+          <Button variant='ghost' className='flex items-center space-x-2 text-indigo-600 hover:text-indigo-800'>
+            <ChevronLeft className='h-4 w-4' />
+            <span className='hidden sm:inline'>Back to Home</span>
+          </Button>
+        </Link>
+        <SignOut />
+      </header>
 
-                </div>
+      <main className='container mx-auto px-4 py-8'>
+        <Card className='mb-8 overflow-hidden bg-white/50 backdrop-blur-sm'>
+          <div className='h-32 bg-gradient-to-r from-indigo-500 to-purple-600'></div>
+          <CardHeader className='flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 -mt-16 relative'>
+            <Avatar className='h-32 w-32 ring-4 ring-white'>
+              <AvatarImage src={profile.image || ''} alt={user.username} />
+              <AvatarFallback><User className='h-16 w-16' /></AvatarFallback>
+            </Avatar>
+            <div className='text-center sm:text-left'>
+              <CardTitle className='text-2xl font-bold'>{user.username}</CardTitle>
+              <p className='text-sm text-gray-600'>Member since {new Date().getFullYear()}</p>
             </div>
-        )
-    return redirect('/')
+          </CardHeader>
+        </Card>
+
+        <Tabs defaultValue="orders" className='bg-white rounded-lg shadow'>
+          <TabsList className='w-full justify-start border-b'>
+            <TabsTrigger value="orders" className='flex items-center space-x-2'>
+              <Package className='h-4 w-4' />
+              <span>Orders</span>
+    
+            </TabsTrigger>
+            <TabsTrigger value="settings" className='flex items-center space-x-2'>
+              <Settings className='h-4 w-4' />
+              <span>Settings</span>
+            </TabsTrigger>
+            <TabsTrigger value="billing" className='flex items-center space-x-2'>
+              <CreditCard className='h-4 w-4' />
+              <span>Billing</span>
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="orders" className='p-4'>
+            <h3 className='text-lg font-semibold mb-4'>
+
+<OrdersTable orders={orders} />
+
+            </h3>
+            {/* Add your orders content here */}
+            {/* <p className='text-gray-600'>You have no orders yet.</p> */}
+          </TabsContent>
+          <TabsContent value="settings" className='p-4'>
+            <h3 className='text-lg font-semibold mb-4'>Account Settings</h3>
+            {/* Add settings content here */}
+            <p className='text-gray-600'>Manage your account settings here.</p>
+          </TabsContent>
+          <TabsContent value="billing" className='p-4'>
+            <h3 className='text-lg font-semibold mb-4'>Billing Information</h3>
+            {/* Add billing content here */}
+            <p className='text-gray-600'>Manage your billing information and subscriptions.</p>
+          </TabsContent>
+        </Tabs>
+      </main>
+    </div>
+  )
 }

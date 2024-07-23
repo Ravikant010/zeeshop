@@ -10,7 +10,18 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 
 type Props = { params: { pdId: string } }
+const cleanupPrice = (priceString:string) => {
+  // Extract only the digits from the string
+  const numericString = priceString.replace(/[^0-9]/g, '');
+  
+  // Convert the string to a number
+  const price = parseInt(numericString, 10);
+  
+  // Return the number, or 0 if the conversion resulted in NaN
+  return isNaN(price) ? 0 : price;
+};
 
+ 
 const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 export default function page({ params }: Props) {
   console.log(params.pdId)
@@ -22,7 +33,8 @@ export default function page({ params }: Props) {
         const fetchedPd = await getItemById("", params.pdId);
         setPd(fetchedPd);
         // Extract the numeric price value
-        const priceValue = Number(fetchedPd.price.replace("₹", "")) * Number(localStorage.getItem("quantity"))
+        console.log(cleanupPrice(fetchedPd.price));
+        const priceValue = (cleanupPrice(fetchedPd.price) * Number(localStorage.getItem("quantity")))
         setOptions(prevOptions => ({
           ...prevOptions,
           amount: priceValue,
@@ -70,12 +82,12 @@ export default function page({ params }: Props) {
             <h2 className='text-red-500'>discounted price {pd?.pd_dscnt_price} <br /></h2>
           }
 
-          <h2><b>pay:</b> <span className='text-red-500'>{pd && Number(pd.price.replace("₹", "")) * quantity}</span></h2>
+          <h2><b>pay:</b> <span className='text-red-500'>{pd && cleanupPrice(pd.price)* quantity}</span></h2>
 
         </section>
         {pd &&
           <Elements stripe={stripePromise} options={options} >
-            <CheckoutForm amount={Number(pd?.price.replace("₹", "")) * quantity} product={pd} />
+            <CheckoutForm amount={cleanupPrice(pd.price) * quantity} product={pd} />
           </Elements>
         }
       </div>

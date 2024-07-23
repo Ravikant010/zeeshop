@@ -9,6 +9,11 @@ export async function getUserAddress(userId:UserId){
     return address;
     }
 
+    export async function getUserAddressByOrderId(addressId:number){
+      const [address] = await db.select().from(addresses).where(eq(addresses.id, addressId))
+      return address;
+      }
+
     export async function setAddress(userId: UserId, addressData: AddressFormValues) {
         // First, check if the user already has an address
         const existingAddress = await getUserAddress(userId);
