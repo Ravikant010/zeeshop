@@ -34,7 +34,7 @@ export type AddressFormValues = z.infer<typeof addressSchema>;
 
 
 
-export function AddressForm({userId}:{userId: UserId}) {
+export function AddressForm({userId,pdId}:{userId: UserId, pdId:string}) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 const router = useRouter()
   const { toast } = useToast()
@@ -71,7 +71,7 @@ const router = useRouter()
       })
     } finally {
       setIsSubmitting(false)
-      router.push('/payment')
+      router.push(`/payment/${pdId}`)
      
     }
   }

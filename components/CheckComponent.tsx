@@ -50,7 +50,7 @@ export default function CheckComponent({ user_address, userId, pdId }: Props) {
   return (
     <div className='pt-20 min-h-screen px-20'>
       {
-        selectedAddress === "add new" && <AddressForm userId={userId} />
+        selectedAddress === "add new" && <AddressForm userId={userId} pdId={pdId}/>
       }
       {/* {
         selectedAddress === "db" && <>
@@ -87,7 +87,7 @@ export default function CheckComponent({ user_address, userId, pdId }: Props) {
           </Card>
         </div> :
         (selectedAddress !== "add new" && selectedAddress !== "db") &&
-        <AddressForm userId={userId} />}
+        <AddressForm userId={userId} pdId={pdId} />}
 
     </div>
   )

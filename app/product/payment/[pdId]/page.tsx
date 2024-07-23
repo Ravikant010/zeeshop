@@ -10,28 +10,19 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 
 type Props = { params: { pdId: string } }
-const options: StripeElementsOptions = {
-  mode: 'payment',
-  amount: 1000,
-  currency: 'inr',
-  appearance: {
-    theme: 'stripe',
-  },
-};
+
 const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 export default function page({ params }: Props) {
-console.log(params.pdId)
+  console.log(params.pdId)
   const [pd, setPd] = useState<Product>()
+  const [quantity, setQuantity] = useState(1)
   useEffect(() => {
     async function fetchPd() {
       try {
         const fetchedPd = await getItemById("", params.pdId);
         setPd(fetchedPd);
-        
         // Extract the numeric price value
-        const priceValue = Number(fetchedPd.price.replace(/[^\d.]/g, "")) * 100; // Multiply by 100 for cents
-        
-        // Update options with the new amount
+        const priceValue = Number(fetchedPd.price.replace("₹", "")) * Number(localStorage.getItem("quantity"))
         setOptions(prevOptions => ({
           ...prevOptions,
           amount: priceValue,
@@ -42,9 +33,13 @@ console.log(params.pdId)
         console.error("Error fetching product:", error);
       }
     }
-    
+
     fetchPd();
   }, [params.pdId]);
+
+  useEffect(()=>{
+    setQuantity(Number(localStorage.getItem("quantity")) || 1)
+  }, [])
   const [options, setOptions] = useState<StripeElementsOptions>({
     mode: 'payment',
     amount: 0,
@@ -64,26 +59,25 @@ console.log(params.pdId)
       </div>
       <div className='flex flex-col  text-lg capitalize' >
         <section className='mb-10'>
-        <h1>
-          {pd?.brand}
-        </h1>
-        <h2>
-          {pd?.pdp_name}
-        </h2>
-        <h2 ><b>quantity: </b>{localStorage.getItem("quantity")}</h2>
-        {pd?.pd_dscnt_price &&
-        <h2 className='text-red-500'>discounted price {pd?.pd_dscnt_price} <br/></h2>
-      
-}
+          <h1>
+            {pd?.brand}
+          </h1>
+          <h2>
+            {pd?.pdp_name}
+          </h2>
+          <h2 ><b>quantity: </b>{quantity}</h2>
+          {pd?.pd_dscnt_price &&
+            <h2 className='text-red-500'>discounted price {pd?.pd_dscnt_price} <br /></h2>
+          }
 
-        <h2><b>pay:</b> <span className='text-red-500'>{pd && Number(pd.price.replace("₹", "")) * Number(localStorage.getItem("quantity"))}</span></h2>
-       
-</section>
-{pd && 
-        <Elements stripe={stripePromise} options={options} >
-        <CheckoutForm amount={Number(pd?.price.replace("₹", ""))} />
-        </Elements>
-}
+          <h2><b>pay:</b> <span className='text-red-500'>{pd && Number(pd.price.replace("₹", "")) * quantity}</span></h2>
+
+        </section>
+        {pd &&
+          <Elements stripe={stripePromise} options={options} >
+            <CheckoutForm amount={Number(pd?.price.replace("₹", "")) * quantity} product={pd} />
+          </Elements>
+        }
       </div>
     </div>
   )

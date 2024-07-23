@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { CreditCard, Loader2 } from 'lucide-react';
 import { Product } from '@/interfaces/interface';
+import Quantity from './quantity';
 
 interface CheckoutFormProps {
   amount: number;
@@ -59,14 +60,14 @@ export function PayButton({ amount, currency, type, processing, stripe }: PayBut
       ) : (
         <>
           <CreditCard className="h-5 w-5" />
-          <span>Pay {(amount / 100).toFixed(2)} {currency.toUpperCase()}</span>
+          <span>Pay {amount} {currency.toUpperCase()}</span>
         </>
       )}
     </Button>
   )
 }
 
-export default function CheckoutForm({ amount }: {amount:number}) {
+export default function CheckoutForm({ amount, product }: {amount:number, product:Product}) {
   console.log("amount", amount)
   const stripe = useStripe();
   const elements = useElements();
@@ -89,11 +90,11 @@ export default function CheckoutForm({ amount }: {amount:number}) {
     const response = await fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({ amount }),
+      body: JSON.stringify({ amount, pdId: product.product_id, size:localStorage.getItem("size"), quantity: Number(localStorage.getItem("quantity"))}),
     });
 
     const { clientSecret } = await response.json();
-
+// console.log(clientSecret, "clientSecret")
     const { error: paymentError } = await stripe.confirmPayment({
       elements,
       clientSecret,
@@ -116,7 +117,7 @@ export default function CheckoutForm({ amount }: {amount:number}) {
       {/* <button type="submit" disabled={!stripe || processing}>
         Pay
       </button> */}
-      <PayButton type='submit'  currency="usd"  amount={amount} processing = {processing} stripe = {stripe} />
+      <PayButton type='submit'  currency="inr"  amount={amount} processing = {processing} stripe = {stripe} />
     </form>
   );
 }

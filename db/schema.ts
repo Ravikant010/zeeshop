@@ -123,7 +123,7 @@ export const orders = pgTable('orders', {
   userId: integer("userId").references(() => users.id, {onDelete: "cascade"}).notNull(),
   addressId: integer('address_id').references(() => addresses.id).notNull(),
   orderDate: timestamp('order_date').defaultNow().notNull(),
-  status: OrderStatus('status').notNull(),
+  status: OrderStatus("pending").notNull()
 });
 // OrderItems table
 export const orderItems = pgTable('order_items', {
@@ -132,14 +132,14 @@ export const orderItems = pgTable('order_items', {
   productId: integer('product_id').notNull(),
   size: text("size").notNull(),
   quantity: integer('quantity').notNull(),
-  price: integer("price").notNull()
+  price: text("price").notNull()
 });
 // Payments table
 export const payments = pgTable('payments', {
   paymentId: serial('payment_id').primaryKey(),
   orderId: integer('order_id').references(() => orders.orderId,{onDelete: "cascade"}).notNull(),
-  paymentMethod: varchar('payment_method', { length: 50 }).notNull(),
-  amount: varchar('amount', { length: 50 }).notNull(),
+  paymentMethod: varchar('payment_method', { length: 50 }).notNull().default('card'),
+  amount: text('amount').notNull(),
   paymentDate: timestamp('payment_date').defaultNow().notNull(),
   status: varchar('status', { length: 50 }).notNull(),
 });

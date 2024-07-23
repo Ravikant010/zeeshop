@@ -13,8 +13,6 @@ import Quantity from '@/components/quantity'
 import { SizeSelector } from '@/components/Sizes'
 type Props = { params: { category: string, id: string, item: string } }
 export default async function Page({ params }: Props) {
-
-  
     const pd:Product = await getItemById(params.category, params.id)
     const ItemByCategory = await getItemByCategory(params.category)
     return (
