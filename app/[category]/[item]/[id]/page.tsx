@@ -11,10 +11,16 @@ import { Item } from '@/components/Item'
 import { Comment, Product } from '@/interfaces/interface'
 import Quantity from '@/components/quantity'
 import { SizeSelector } from '@/components/Sizes'
+import AddToCart from '@/components/AddToCart'
+import { getCurrentUser } from '@/lib/session'
+import { redirect } from 'next/navigation'
 type Props = { params: { category: string, id: string, item: string } }
 export default async function Page({ params }: Props) {
-    const pd:Product = await getItemById(params.category, params.id)
+    const pd: Product = await getItemById(params.category, params.id)
     const ItemByCategory = await getItemByCategory(params.category)
+    const user = await getCurrentUser()
+    if(!user)
+        return redirect("/login")
     return (
         <div className='pt-12'>
             <BreadcrumbComponent category={params.category} item={params.item} />
@@ -37,10 +43,11 @@ export default async function Page({ params }: Props) {
                     {/* <div className='text-lg flex  lg:full justify-between items-center font-semibold'>select size <div className='flex-1 flex pl-10'>{pd && pd.sizes.map((e:string) => <Button key={e} className='w-14 h-14 rounded-full border-2 flex items-center justify-center mr-6 text-sm font-normal bg-transparent text-black  hover:border-[#FF527B] hover:bg-transparent'>{e.split(".")[0]} </Button>)}</div></div> */}
                     <Quantity />
                     <div className='grid grid-cols-2 gap-2 mt-6'>
-                        <Button className='py-6 font-semibold'>Add To Cart</Button>        <Link href= {`/address/${pd.product_id}`} className='w-full'>
+                        <AddToCart pd_name={pd.pdp_name} pdId={pd.product_id} userId = {user.id} />
+                        <Link href={`/address/${pd.product_id}`} className='w-full'>
 
-                        <Button className='py-6 font-semibold w-full'>Buy</Button></Link>
-                        </div>
+                            <Button className='py-6 font-semibold w-full'>Buy</Button></Link>
+                    </div>
                     <div className='mt-6 lg:text-lg py-2 font-semibold'>product details</div>
                     <Separator orientation='horizontal' />
                     <p className='py-2'>
@@ -48,10 +55,10 @@ export default async function Page({ params }: Props) {
                     </p>
                     <div className='font-semibold '>material</div>
                     <ul className='list-none'>
-  {pd && pd.pd_material.split("\n").map((e: string, index: number) => 
-    e ? <li key={index} className='my-2'>{e}</li> : null
-  )}
-</ul>
+                        {pd && pd.pd_material.split("\n").map((e: string, index: number) =>
+                            e ? <li key={index} className='my-2'>{e}</li> : null
+                        )}
+                    </ul>
                     <div className='font-semibold mb-2'>Specifications</div>
                     <div className='grid grid-cols-2 gap-x-2 gap-y-4'>
                         {
@@ -62,7 +69,7 @@ export default async function Page({ params }: Props) {
                     </div>
                     <div className='my-2'>
                         <div className='my-2'>
-                           <code> product code:</code>
+                            <code> product code:</code>
                             {pd && pd.product_id}
                         </div>
                         <div className='my-2'>
@@ -73,14 +80,14 @@ export default async function Page({ params }: Props) {
                         <div className='font-semibold my-2'>Customer Reviews</div>
                         <ScrollArea className="h-[400px] w-full rounded-md border p-4 flex flex-col">
                             {//@ts-ignore
-                                pd && pd.comments.map((e:Comment) => <div key={e?.user_name} className='mb-4'>
+                                pd && pd.comments.map((e: Comment) => <div key={e?.user_name} className='mb-4'>
                                     <div className='font-semibold'>{e.user_name}
                                         <Separator orientation='horizontal' />
                                     </div>
                                     <p className='my-2'>
                                         {e.comment}
                                     </p>
-                                    <div  className='w-full text-right text-sm'>  {e.date}</div>
+                                    <div className='w-full text-right text-sm'>  {e.date}</div>
                                 </div>)
                             }
                         </ScrollArea>

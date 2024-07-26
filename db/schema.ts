@@ -9,6 +9,7 @@ import {
   varchar,
   date,
   pgEnum,
+  foreignKey,
 } from "drizzle-orm/pg-core"
 import postgres from "postgres"
 import { drizzle } from "drizzle-orm/postgres-js"
@@ -154,9 +155,23 @@ export const resetTokens = pgTable("reset_tokens", {
   tokenExpiresAt: timestamp("token_expires_at").notNull(),
 });
 
+
+export const cartItems = pgTable('cart_items', {
+  id: serial('id').primaryKey(),
+  userId: integer("user_id")
+  .references(() => users.id, { onDelete: "cascade" })
+  .notNull(),
+  pdId: text("pdId").unique().notNull(),
+  size: text("size").notNull(),
+  quantity: integer('quantity').notNull().default(1),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+})
+
 export type User = typeof users.$inferSelect;
 export type Profile = typeof profiles.$inferSelect;
 export type Address = typeof addresses.$inferSelect; 
+export type CartItems = typeof cartItems.$inferSelect
 // export const users = pgTable("user", {
 //   id: text("id")
 //     .primaryKey()

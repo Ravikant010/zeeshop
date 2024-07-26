@@ -15,11 +15,18 @@ export function SizeSelector({ sizes }: SizeSelectorProps) {
 
   useEffect(() => {
     updateAvailableSizes(sizes);
+    selectSize(sizes[0])
+   
+
   }, [sizes]);
+useEffect(()=>{
+  if(selectedSize)
+  localStorage.setItem("size", selectedSize)
+}, [selectSize])
 
   const handleSizeSelect = (size: string) => {
     selectSize(size);
-    localStorage.setItem("size", size)
+
     // if (onSizeSelect) {
     //   onSizeSelect(size);
     // }

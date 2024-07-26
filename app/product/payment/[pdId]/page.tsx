@@ -78,6 +78,7 @@ export default function page({ params }: Props) {
             {pd?.pdp_name}
           </h2>
           <h2 ><b>quantity: </b>{quantity}</h2>
+          <h2 ><b>size: </b>{localStorage.getItem("size")}</h2>
           {pd?.pd_dscnt_price &&
             <h2 className='text-red-500'>discounted price {pd?.pd_dscnt_price} <br /></h2>
           }

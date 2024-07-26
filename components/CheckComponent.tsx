@@ -15,7 +15,7 @@ interface Props {
     postalCode: string;
     country: string;
   } | null;
-  userId: string;
+  userId: number;
   pdId: string;
 }
 

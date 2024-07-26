@@ -11,12 +11,15 @@ import { Item } from '@/components/Item'
 import { Comment, Product } from '@/interfaces/interface'
 import Quantity from '@/components/quantity'
 import { SizeSelector } from '@/components/Sizes'
-
+import { metadata_obj } from '@/components/size_quantity'
 type Props = { params: { pdname: string, pdid: string } }
 export default async function Page({ params }: Props) {
-
     const pd: Product = await getItemById('', params.pdid)
     const ItemsByBrands = await getItemsByBrands(pd.brand)
+
+
+
+
     return (
         <div className='pt-12'>
             <BreadcrumbComponent category={''} item={pd.pdp_name} />
@@ -39,12 +42,10 @@ export default async function Page({ params }: Props) {
                     {/* <div className='text-lg flex  lg:full justify-between items-center font-semibold'>select size <div className='flex-1 flex pl-10'>{pd && pd.sizes.map((e: string) => <Button key={e} className='w-14 h-14 rounded-full border-2 flex items-center justify-center mr-6 text-sm font-normal bg-transparent text-black  hover:border-[#FF527B] hover:bg-transparent'>{e.split(".")[0]} </Button>)}</div></div> */}
                     <Quantity />
                     <div className='grid grid-cols-2 gap-2 mt-6'>
-                        <Button className='py-6 font-semibold'>Add To Cart</Button>   
-                         
-                        <Link href= {`/address/${pd.product_id}`} className='w-full'>
-
-                    <Button className='py-6 font-semibold w-full'>Buy</Button>
-                    </Link>
+                        <Button className='py-6 font-semibold' >Add To Cart</Button>
+                        {/* <Link href= {`/address/${pd.product_id}`} className='w-full'> */}
+                        <Button className='py-6 font-semibold w-full'>Buy</Button>
+                        {/* </Link> */}
                     </div>
                     <div className='mt-6 lg:text-lg py-2 font-semibold'>product details</div>
                     <Separator orientation='horizontal' />
@@ -53,20 +54,19 @@ export default async function Page({ params }: Props) {
                     </p>
                     <div className='font-semibold '>material</div>
                     <ul className='list-none'>
-  {pd && pd.pd_material.split("\n").map((e: string, index: number) => 
-    e ? <li key={index} className='my-2'>{e}</li> : null
-  )}
-</ul>
-
+                        {pd && pd.pd_material.split("\n").map((e: string, index: number) =>
+                            e ? <li key={index} className='my-2'>{e}</li> : null
+                        )}
+                    </ul>
                     <div className='font-semibold mb-2'>Specifications</div>
                     <div className='grid grid-cols-2 gap-x-2 gap-y-4 '>
                         {
                             pd && Object.keys(pd.item_spec).map((e: string) => <div className='flex flex-col justify-center items-start w-full border-b-[1px]'>
-                                <p className='text-zinc-500 text-sm'>{e}</p> 
+                                <p className='text-zinc-500 text-sm'>{e}</p>
                                 <p>{
                                     //@ts-ignore}
                                     pd.item_spec[e]}</p>
-                                    </div>)
+                            </div>)
                         }
                     </div>
                     <div className='my-2'>

@@ -169,6 +169,34 @@
       "when": 1721673654859,
       "tag": "0023_quick_fat_cobra",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1721806191951,
+      "tag": "0024_flimsy_the_anarchist",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1721807825454,
+      "tag": "0025_glorious_doctor_octopus",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1721808064273,
+      "tag": "0026_zippy_king_cobra",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1721987306652,
+      "tag": "0027_green_reavers",
+      "breakpoints": true
     }
   ]
 }
