@@ -27,7 +27,7 @@ export default async function ProfilePage({ }: Props) {
     <div className='w-full min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 absolute -top-14'>
       <header className='sticky top-0 z-10 flex justify-between items-center w-full p-4 bg-white/80 backdrop-blur-sm shadow-sm'>
         <Link href='/' className='h-full w-full'>
-          <Button variant='ghost' className='flex items-center space-x-2 text-indigo-600 hover:text-indigo-800'>
+          <Button variant='ghost' className='flex items-center space-x-2'>
             <ChevronLeft className='h-4 w-4' />
             <span className='hidden sm:inline'>Back to Home</span>
           </Button>
@@ -40,7 +40,7 @@ export default async function ProfilePage({ }: Props) {
           <div className='h-32 bg-gradient-to-r from-indigo-500 to-purple-600'></div>
           <CardHeader className='flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 -mt-16 relative'>
             <Avatar className='h-32 w-32 ring-4 ring-white'>
-              <AvatarImage src={profile.image || ''} alt={user.username} />
+              <AvatarImage src={profile.image || ''} alt={user.username} className='cover object-cover'/>
               <AvatarFallback><User className='h-16 w-16' /></AvatarFallback>
             </Avatar>
             <div className='text-center sm:text-left'>

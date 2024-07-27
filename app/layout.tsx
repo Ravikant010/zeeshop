@@ -22,7 +22,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className+"w-full"}>
       <ServerComponentTopNavBar />
-    <div className="top-14 absolute w-full">
+    <div className=" absolute w-full">
         {children}
         </div>
         <Toaster />

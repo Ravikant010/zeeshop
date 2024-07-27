@@ -17,7 +17,7 @@ export default function MidBar({ }: Props) {
     return (
         <div style={{
             position: scrollPosition >= 560 ? "fixed" : "relative",
-            top: scrollPosition >= 560 ? '45px' : "0"
+            top: scrollPosition >= 560 ? '57px' : "0"
         }} className="w-full  z-10">
             <div className="w-full grid grid-cols-2 p-2  content-center bg-[#fdfffc] border-b-[1px] border-black">
                 <div className=" flex items-center">Sort By:</div>

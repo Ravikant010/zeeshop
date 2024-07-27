@@ -2,6 +2,7 @@
 import { eq, and } from 'drizzle-orm';
 import { db } from '@/db/schema'; // Assuming you have a db.ts file where you initialize your Drizzle client
 import { cartItems } from '@/db/schema' // Importing the schema we defined earlier
+import { getCurrentUser } from '@/lib/session';
 
 interface CreateCartItemParams {
   userId: number;
@@ -25,6 +26,19 @@ export async function addToCart(userId: number, size: string, quantity: number =
   export async function getCartItems(userId: number) {
     return db.select().from(cartItems).where(eq(cartItems.userId, userId));
   }
+
+  export async function deleteCartItem( pdId: string) {
+    const user = await getCurrentUser()
+
+    if(user)
+      {
+        const [cartItem] = await db.select().from(cartItems).where(and(eq(cartItems.userId, user.id), eq(cartItems.pdId , pdId)))
+ 
+        if(cartItem)
+    return db.delete(cartItems).where(and(eq(cartItems.userId, user.id), eq(cartItems.pdId , pdId)));
+      }
+    
+  }
   
   // Function to update the quantity of a cart item
   export async function updateCartItemQuantity(itemId: number, quantity: number) {
@@ -46,3 +60,5 @@ export async function addToCart(userId: number, size: string, quantity: number =
   export async function clearCart(userId: number) {
     await db.delete(cartItems).where(eq(cartItems.userId, userId));
   }
+
+

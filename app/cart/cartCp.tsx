@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getItemById } from '@/fetch/fetchAPIS';
 import { CartItems } from '@/db/schema';
-
+import { Trash2 , PackageOpen} from 'lucide-react'
+import { deleteCartItem } from '@/data-access/cart';
 interface Product {
     brand: string;
     product: string;
@@ -81,7 +82,7 @@ console.log(cartItemsWithDetails)
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
             {cartItemsWithDetails.length === 0 ? (
-                <p>Your cart is empty.</p>
+                <p className='text-center w-full h-screen flex justify-center items-center text-lg font-semibold'><PackageOpen className="h-6 w-6 mr-2"/> Your cart is empty.</p>
             ) : (
                 <>
                     {cartItemsWithDetails.map((item) => (
@@ -102,16 +103,34 @@ console.log(cartItemsWithDetails)
                                 </div>
                                 <div className="text-right">
                                     <p className="font-bold">{item.productDetails.price}</p>
-                                    {item.productDetails.dscnt_price && (
+                                    {item.productDetails.dscnt_price ? (
                                         <p className="text-sm text-gray-500 line-through">{item.productDetails.pd_strike}</p>
-                                    )}
+                                    ): 
+                                    <p className="text-sm text-gray-500  capitalize line-through">{"no discount"}</p>}
+                                                       <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={async (e) => {
+                    e.stopPropagation();
+                    await deleteCartItem(item.pdId)
+                    window.location.reload()
+                
+                      // Prevent card click when delete is clicked
+                    // You'll need to implement this function
+                }}
+                className="ml-2"
+            >
+                <Trash2 className="h-6 w-6" />
+            </Button>
                                 </div>
                             </CardContent>
+         
                         </Card>
                     ))}
                     <Separator className="my-4" />
                     <div className="flex justify-between items-center">
                         <p className="text-xl font-bold">Total: RS.{total.toFixed(2)}</p>
+                        
                         {/* <Button onClick={() => router.push(`/address/${pd.product_id}`)} className="bg-blue-500 hover:bg-blue-600 text-white">
                             Proceed to Checkout
                         </Button> */}

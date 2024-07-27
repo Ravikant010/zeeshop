@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { CreditCard, Loader2 } from 'lucide-react';
 import { Product } from '@/interfaces/interface';
 import Quantity from './quantity';
+import { deleteCartItem, getCartItems } from '@/data-access/cart';
+import { User } from '@/db/schema';
+
 
 interface CheckoutFormProps {
   amount: number;
@@ -69,15 +72,21 @@ export function PayButton({ amount, currency, type, processing, stripe }: PayBut
 
 export default function CheckoutForm({ amount, product }: {amount:number, product:Product}) {
   console.log("amount", amount)
+
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState<boolean>(false);
   const [pd, setPd] = useState<Product>()
+
+
+
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setProcessing(true);
-
+    await deleteCartItem(product.product_id)
+// const isIteminCart = await getCartItem(user)
     if (!stripe || !elements) return;
 
     const { error: submitError } = await elements.submit();
