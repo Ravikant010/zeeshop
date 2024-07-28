@@ -1,3 +1,4 @@
+"ues server"
 import { auth } from '@/auth'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -18,7 +19,7 @@ type Props = {}
 export default async function ProfilePage({ }: Props) {
   const user = await getCurrentUser()
 
-  if (!user) return null
+  if (!user) return redirect("/sign-in")
   const orders= await  getOrdersByUserId(user.id)
   console.log(orders)
   const profile = await getProfile(user.id)
@@ -32,7 +33,7 @@ export default async function ProfilePage({ }: Props) {
             <span className='hidden sm:inline'>Back to Home</span>
           </Button>
         </Link>
-        <SignOut />
+        <SignOut userId={user.id}/>
       </header>
 
       <main className='container mx-auto px-4 py-8'>

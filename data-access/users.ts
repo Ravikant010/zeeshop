@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import crypto from "crypto"
 import { getAccountByUserId } from "./account";
 import { UserId } from "@/use-cases/types";
+import { LoginError } from "./errors";
 const ITERATIONS = 10000
 const MAGIC_LINK_TOKEN_TTL = 1000 * 60 * 5
 export async function deleteUser(userId: UserId) {
@@ -84,4 +85,20 @@ export async function setEmailVerified(userId: number) {
 
 export async function updateUser(userId:number, updateUser:Partial<User>) {
  await db.update(users).set(updateUser).where(eq(users.id, userId))   
+}
+
+export async function signInUseCase(email: string, password: string) {
+    const user = await getUserByEmail(email);
+  
+    if (!user) {
+      throw new LoginError();
+    }
+  
+    const isPasswordCorrect = await verifyPassword(email, password);
+
+    if (!isPasswordCorrect) {
+      throw new LoginError();
+    }
+  
+    return { id: user.id };
 }
