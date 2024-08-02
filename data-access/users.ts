@@ -1,10 +1,16 @@
+"use server"
 import { db } from "@/db/schema";
 import { User, accounts, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import crypto from "crypto"
 import { getAccountByUserId } from "./account";
 import { UserId } from "@/use-cases/types";
-import { LoginError } from "./errors";
+import { AuthenticationError, LoginError } from "./errors";
+import { createPasswordResetToken } from "./reset-token";
+import { sendEmail } from "@/lib/email";
+import { env } from "@/env";
+import {ResetPasswordEmail} from "@/email/resetEmail"
+import { applicationName } from "@/lib/app-config";
 const ITERATIONS = 10000
 const MAGIC_LINK_TOKEN_TTL = 1000 * 60 * 5
 export async function deleteUser(userId: UserId) {
@@ -102,3 +108,5 @@ export async function signInUseCase(email: string, password: string) {
   
     return { id: user.id };
 }
+
+

@@ -24,7 +24,7 @@ export default async function Page({ params }: Props) {
     return (
         <div className='pt-12'>
             <BreadcrumbComponent category={params.category} item={params.item} />
-            <section className='w-full grid grid-cols-2 px-20 h-full'>
+            <section className='w-full lg:grid lg:grid-cols-2 px-20 h-full flex flex-col'>
                 <div className=' w-full h-full grid grid-cols-2 gap-4  capitalize place-content-start self-center justify-center justify-items-center'>
                     <img src={pd && pd['image_urls'][0] ? pd['image_urls'][0] : ''} alt="" className='max-h-[500px]    w-full object-cover' />
                     <img src={pd && pd['image_urls'][1] ? pd['image_urls'][1] : ''} alt='' className='max-h-[500px]   w-full object-cover' />

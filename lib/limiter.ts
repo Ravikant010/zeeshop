@@ -1,3 +1,4 @@
+"use server"
 import { RateLimitError } from "./errors";
 import { getIp } from "./get-ip";
 
@@ -66,7 +67,7 @@ export async function rateLimitByKey({
   }
 
   tracker.count++;
-
+console.log(tracker)
   if (tracker.count > limit) {
     throw new RateLimitError();
   }

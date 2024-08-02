@@ -42,7 +42,7 @@ if(!user)
       <div className="bg-[url('https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/25756908/2024/3/8/5d2c2c76-e897-4f53-9435-5ade656700391709875789093-Levis-Men-Jeans-5171709875788624-4.jpg')] md:inline-block hidden w-full h-full bg-cover bg-no-repeat"></div>
     </section>
 <MidBar />
-<section className="flex flex-col grid-cols-2 md:grid xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 w-full border border-black border-t-0">
+<section className="flex flex-col md:grid sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 w-full border border-black border-t-0">
       {items && items.map((product: Product, index: number) => (
         <Item key={product.product_id || index} product={product} />
       ))}

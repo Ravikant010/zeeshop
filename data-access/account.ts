@@ -40,10 +40,12 @@ export async function createAccountByGoogle(userId: UserId, googleId: string) {
 export async function updatePassword(userId: UserId, password: string, trx = db) {
     const salt = crypto.randomBytes(128).toString('base64');
     const hash = await hashPassword(password, salt);
-    await trx.update(accounts).set({
+   const [updated] =  await trx.update(accounts).set({
         password: hash,
         salt
-    }).where(and(eq(accounts.userId, userId), eq(accounts.accountType, "email")))
+    }).where(and(eq(accounts.userId, userId), eq(accounts.accountType, "email"))).returning()
+    console.log("up0dated",updated)
+    return updated;
 }
 export async function getAccountByGoogleId(googleId: string) {
     const user_by_google = await db.select().from(accounts).where(eq(accounts.googleId, googleId))

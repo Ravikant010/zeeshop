@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   if(ItemsByCategory)
   return (<main className='pt-12 h-screen w-full'>
     <BreadcrumbWithCustomSeparator category={params.slug.replace(/%20/g, ' ')} />
-    <section className="grid grid-cols-4 w-full h-[600px] border border-black">
+    <section className="flex flex-col md:grid sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 w-full border border-black border-t-0">
       {
         ItemsByCategory && ItemsByCategory.map((e:Product, index:number) => <Item key={index} product={e} />)
       }

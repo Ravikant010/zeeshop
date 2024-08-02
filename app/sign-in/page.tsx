@@ -63,7 +63,7 @@ export default function page({ }: Props) {
                         control={form.control}
                         name="password"
                         render={({ field }) => (
-                            <FormItem className="w-[400px]">
+                            <FormItem className="w-[400px] ">
                                 <FormLabel className="">password</FormLabel>
                                 <FormControl>
                                     <Input placeholder="password" {...field} className="py-4" />
@@ -72,14 +72,15 @@ export default function page({ }: Props) {
                             </FormItem>
                         )}
                     />
+                    <Link className="capitalize   " href= "/forget-password">forget password</Link>
                     <Button type="submit" className="w-full h-10">Submit</Button>
                 </form>
             </Form>
             <Link href="/sign-up" className="capitalize">Create a New Account</Link>
             <Separator className="w-[400px]" />
-            <div className="flex flex-col w-[400px]">
+            {/* <div className="flex flex-col w-[400px]">
                 <SignIn />
-            </div>
+            </div> */}
         </div>
     )
 }
