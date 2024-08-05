@@ -39,6 +39,7 @@
     "lucide-react": "^0.395.0",
     "next": "14.2.4",
     "next-auth": "beta",
+    "postgres": "^3.4.4",
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
