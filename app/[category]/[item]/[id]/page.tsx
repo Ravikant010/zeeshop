@@ -62,7 +62,7 @@ export default async function Page({ params }: Props) {
                     <div className='font-semibold mb-2'>Specifications</div>
                     <div className='grid grid-cols-2 gap-x-2 gap-y-4'>
                         {
-                            pd && Object.keys(pd.item_spec).map(e => <div className='flex flex-col justify-center items-start w-full border-b-[1px]'><p className='text-zinc-500 text-sm'>{e}</p> <p>{
+                            pd && Object.keys(pd.item_spec).map((e, i) => <div className='flex flex-col justify-center items-start w-full border-b-[1px]' key = {i}><p className='text-zinc-500 text-sm'>{e}</p> <p>{
                                 //@ts-ignore
                                 pd?.item_spec[e]}</p></div>)
                         }

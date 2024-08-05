@@ -16,7 +16,7 @@ export default function CAccordion({triggerText, contentText}: Props) {
     <AccordionItem value="item-1">
       <AccordionTrigger>{triggerText}</AccordionTrigger>
       <AccordionContent>
-        {contentText.map(e=><li>{e}</li>)}
+        {contentText.map(e=><li key={e}>{e}</li>)}
       </AccordionContent>
     </AccordionItem>
     </Accordion>

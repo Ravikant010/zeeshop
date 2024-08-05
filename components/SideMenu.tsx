@@ -27,12 +27,16 @@ import { useSession } from "next-auth/react"
 
             </SheetTitle>
             <SheetDescription>
-<div className="flex items-center bg-[#F6F7F9]  rounded-xl mt-6  bg-opacity-80"><UserAvatar /><p className="ml-3 text-lg font-semibold">{session && session.data && session.data.user && session.data.user.name as string}</p></div>
+<div className="flex items-center bg-[#F6F7F9]  rounded-xl mt-6  bg-opacity-80">
+
+  {/* <UserAvatar /> */}
+  
+  <p className="ml-3 text-lg font-semibold">{session && session.data && session.data.user && session.data.user.name as string}</p></div>
             </SheetDescription>
           </SheetHeader>
           <ul className="mt-6 p-4 capitalize">
-          {["NewArrival", "dashboard"].map(e=>
-    <li className=" bg-red-50 h-14  py-6 flex items-center pl-4 rounded-lg">
+          {["NewArrival", "dashboard"].map((e, index)=>
+    <li className=" bg-red-50 h-14  py-6 flex items-center pl-4 rounded-lg" key={index}> 
 {e}
     </li>
 

@@ -17,7 +17,7 @@ import { useState } from "react";
 
 import Link from "next/link";
 // Ensure this path is correct
-export const formSchema = z.object({
+ const formSchema = z.object({
 	username: z.string()
 	  .min(3, "Username must be at least 3 characters long")
 	  .max(30, "Username must not exceed 30 characters")
@@ -202,7 +202,7 @@ import { useRouter } from 'next/navigation'
 import { afterLoginUrl } from "@/lib/app-config";
 
 
-export function DatePickerDemo({ setDate }: {
+ function DatePickerDemo({ setDate }: {
     setDate: (date: Date) => void
 }) {
     const [date, setDate_] = React.useState<Date>();

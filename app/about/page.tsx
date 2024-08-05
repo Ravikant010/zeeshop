@@ -27,7 +27,7 @@ const AboutPage: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p>
-              We believe in offering fashion that doesn't compromise on quality. 
+              We believe in offering fashion that doesn&#39;t compromise on quality. 
               Every piece in our collection is carefully selected to ensure both style and durability.
             </p>
           </CardContent>

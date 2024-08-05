@@ -31,7 +31,7 @@ const formSchema = z.object({
         .min(5)
         .max(255),
 });
-export default function page({ }: Props) {
+export default function Page({ }: Props) {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {

@@ -23,7 +23,7 @@ const cleanupPrice = (priceString:string) => {
 
  
 const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-export default function page({ params }: Props) {
+export default function Page({ params }: Props) {
   console.log(params.pdId)
   const [pd, setPd] = useState<Product>()
   const [quantity, setQuantity] = useState(1);

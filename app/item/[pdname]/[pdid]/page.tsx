@@ -16,10 +16,6 @@ type Props = { params: { pdname: string, pdid: string } }
 export default async function Page({ params }: Props) {
     const pd: Product = await getItemById('', params.pdid)
     const ItemsByBrands = await getItemsByBrands(pd.brand)
-
-
-
-
     return (
         <div className='pt-12'>
             <BreadcrumbComponent category={''} item={pd.pdp_name} />
@@ -61,7 +57,7 @@ export default async function Page({ params }: Props) {
                     <div className='font-semibold mb-2'>Specifications</div>
                     <div className='grid grid-cols-2 gap-x-2 gap-y-4 '>
                         {
-                            pd && Object.keys(pd.item_spec).map((e: string) => <div className='flex flex-col justify-center items-start w-full border-b-[1px]'>
+                            pd && Object.keys(pd.item_spec).map((e: string, i:number) => <div className='flex flex-col justify-center items-start w-full border-b-[1px]' key = {i}>
                                 <p className='text-zinc-500 text-sm'>{e}</p>
                                 <p>{
                                     //@ts-ignore}
