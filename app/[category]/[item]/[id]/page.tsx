@@ -21,6 +21,8 @@ export default async function Page({ params }: Props) {
     const user = await getCurrentUser()
     if(!user)
         return redirect("/login")
+    if(!pd)
+        return <>loading</>
     return (
         <div className='pt-12'>
             <BreadcrumbComponent category={params.category} item={params.item} />
