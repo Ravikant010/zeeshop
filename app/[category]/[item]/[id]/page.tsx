@@ -57,14 +57,14 @@ export default async function Page({ params }: Props) {
                     </p>
                     <div className='font-semibold '>material</div>
                     <ul className='list-none'>
-                        {pd && pd.pd_material.split("\n").map((e: string, index: number) =>
+                        {pd && pd.pd_material?.split("\n")?.map((e: string, index: number) =>
                             e ? <li key={index} className='my-2'>{e}</li> : null
                         )}
                     </ul>
                     <div className='font-semibold mb-2'>Specifications</div>
                     <div className='grid grid-cols-2 gap-x-2 gap-y-4'>
                         {
-                            pd && Object.keys(pd.item_spec).map((e, i) => <div className='flex flex-col justify-center items-start w-full border-b-[1px]' key = {i}><p className='text-zinc-500 text-sm'>{e}</p> <p>{
+                            pd && Object.keys(pd.item_spec)?.map((e, i) => <div className='flex flex-col justify-center items-start w-full border-b-[1px]' key = {i}><p className='text-zinc-500 text-sm'>{e}</p> <p>{
                                 //@ts-ignore
                                 pd?.item_spec[e]}</p></div>)
                         }
@@ -82,7 +82,7 @@ export default async function Page({ params }: Props) {
                         <div className='font-semibold my-2'>Customer Reviews</div>
                         <ScrollArea className="h-[400px] w-full rounded-md border p-4 flex flex-col">
                             {//@ts-ignore
-                                pd && pd.comments.map((e: Comment) => <div key={e?.user_name} className='mb-4'>
+                                pd && pd.comments?.map((e: Comment) => <div key={e?.user_name} className='mb-4'>
                                     <div className='font-semibold'>{e.user_name}
                                         <Separator orientation='horizontal' />
                                     </div>
@@ -99,7 +99,7 @@ export default async function Page({ params }: Props) {
             </section>
             <div className='grid grid-cols-4 mt-6'>
                 {
-                    ItemByCategory && ItemByCategory.map((e: Product, index: number) => <Item key={index} product={e} />)
+                    ItemByCategory && ItemByCategory?.map((e: Product, index: number) => <Item key={index} product={e} />)
                 }
             </div>
         </div>
