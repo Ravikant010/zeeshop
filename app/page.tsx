@@ -30,6 +30,8 @@ if(!user)
     // if(size && quantity)
     //   await addToCart(user?.id!, size, quantity,pdId )
   }
+  if(!items)
+    return <>loading</>
   return (
     <main className="flex min-h-screen flex-col items-center max-h-auto w-full">
     <section className="grid md:grid-cols-2 grid-cols-1 w-full h-[600px] border border-black">

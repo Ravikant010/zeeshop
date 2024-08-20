@@ -100,7 +100,7 @@ export  function Item({
     if (!product) return null;
 
     const productLink = route === "/" 
-        ? `/item/${product.pdp_name.replace(/\s/g, "-")}/${product.product_id}`
+        ? `/item/${product?.pdp_name?.replace(/\s/g, "-")}/${product.product_id}`
         : `/${route.split('/')[1]}/${product.pdp_name.replace(/\s/g, "-")}/${product.product_id}`;
 
     return (
