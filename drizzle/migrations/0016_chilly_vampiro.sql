@@ -1,1 +1,0 @@
-ALTER TABLE "addresses" ALTER COLUMN "userId" SET DATA TYPE integer;

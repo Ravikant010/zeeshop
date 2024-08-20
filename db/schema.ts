@@ -13,8 +13,10 @@ import {
 } from "drizzle-orm/pg-core"
 import postgres from "postgres"
 import { drizzle } from "drizzle-orm/postgres-js"
+import { createClient } from '@supabase/supabase-js';
 import type { AdapterAccountType } from "next-auth/adapters"
 const connectionString = process.env.DATABASE_URL as string
+
 export const pool = postgres(connectionString, { max: 1 })
 export const db = drizzle(pool)
 
@@ -56,7 +58,7 @@ id: serial('id').primaryKey(),
     .notNull()
     .unique(),
   token: text('token'),
-  tokenExpiresAt: timestamp('token_expires_at').notNull(),
+  tokenExpiresAt: timestamp('token_expires_at').notNull()
 });
 export const profiles = pgTable('profile', {
   id: serial('id').primaryKey(),
@@ -67,7 +69,7 @@ export const profiles = pgTable('profile', {
   displayName: varchar('display_name'),
   imageId: varchar('image_id'),
   image: varchar('image'),
-  bio: text('bio').notNull().default(''),
+  bio: text('bio').notNull().default('')
 });
 
 // export const sessions = pgTable('session', {
@@ -139,7 +141,7 @@ export const orderItems = pgTable('order_items', {
 export const payments = pgTable('payments', {
   paymentId: serial('payment_id').primaryKey(),
   orderId: integer('order_id').references(() => orders.orderId,{onDelete: "cascade"}).notNull(),
-  paymentMethod: varchar('payment_method', { length: 50 }).notNull().default('card'),
+    payment_method: varchar("payment_method", { length: 50 }).notNull().default('card'),
   amount: text('amount').notNull(),
   paymentDate: timestamp('payment_date').defaultNow().notNull(),
   status: varchar('status', { length: 50 }).notNull(),

@@ -14,10 +14,14 @@ server: {
     EMAIL_SERVER_HOST: z.string().min(1),
     EMAIL_SERVER_PORT: z.string().min(1),
     EMAIL_SERVER_USER: z.string().min(1),
-    EMAIL_SERVER_PASSWORD: z.string().min(1)
+    EMAIL_SERVER_PASSWORD: z.string().min(1),
+
+
     
 }, client : {
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
+    NEXT_PUBLIC_SUPABASE_URL: z.string().min(1),
+    NEXT_PUBLIC_SUPABASE_ANON_KEY:z.string().min(1),
 },
 runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
@@ -33,5 +37,7 @@ runtimeEnv: {
     EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
     EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT,
     EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 }
 })
