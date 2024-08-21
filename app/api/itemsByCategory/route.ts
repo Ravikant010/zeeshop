@@ -3,6 +3,7 @@ import { type NextRequest } from "next/server";
 import path from "path";
 const currentDirectory =  path.join(process.cwd(), 'public')
 function extractAllProducts(category: string) {
+    console.log(category.toLowerCase())
     try {
         // console.log(`_${category}.json`)
         let products: object[] = [];; // Use an array to store all products
@@ -11,6 +12,7 @@ function extractAllProducts(category: string) {
         files.forEach(file => {
             if (path.extname(file) === '.json') { // Check if file is JSON
                 // Read the JSON file
+
                 const data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../../../public', file), 'utf-8'));
                 if (file === `_${category.toLowerCase()}.json`) {
                     products = data
