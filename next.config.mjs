@@ -5,8 +5,16 @@ const nextConfig = {
 		serverComponentsExternalPackages: ["@node-rs/argon2"]
 	},
 	images: {
-		domains: ['assets.myntassets.com'],
+		remotePatterns: [
+		  {
+			protocol: 'https',
+			hostname: 'assets.myntassets.com'
+		  },
+		],
 	  },
+	// images: {
+	// 	domains: ['assets.myntassets.com'],
+	//   },
 };
 
 

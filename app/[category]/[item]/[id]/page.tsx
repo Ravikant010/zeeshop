@@ -42,7 +42,11 @@ export default async function Page({ params }: Props) {
                     <Separator orientation='horizontal' />
                     <div className='lg:text-[24px] my-4'>{pd && pd.price} </div>
                     <SizeSelector sizes={pd.sizes} />
-                    {/* <div className='text-lg flex  lg:full justify-between items-center font-semibold'>select size <div className='flex-1 flex pl-10'>{pd && pd.sizes.map((e:string) => <Button key={e} className='w-14 h-14 rounded-full border-2 flex items-center justify-center mr-6 text-sm font-normal bg-transparent text-black  hover:border-[#FF527B] hover:bg-transparent'>{e.split(".")[0]} </Button>)}</div></div> */}
+
+
+
+
+
                     <Quantity />
                     <div className='grid grid-cols-2 gap-2 mt-6'>
                         <AddToCart pd_name={pd.pdp_name} pdId={pd.product_id} userId = {user.id} />
