@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     <BreadcrumbWithCustomSeparator brand={params?.slug?.replace(/%20/g, ' ')} />
     <section className="flex flex-col md:grid sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 w-full border border-black border-t-0">
       {
-        ItemsByBrand && ItemsByBrand?.map((e:Product, index:number) => <Item key={index} product={e} />)
+        ItemsByBrand.length > 0  && ItemsByBrand?.map((e:Product, index:number) => <Item key={index} product={e} />)
       }
     </section>
   </main>
