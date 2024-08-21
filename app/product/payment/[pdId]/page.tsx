@@ -61,7 +61,7 @@ export default function Page({ params }: Props) {
     },
   })
   return (
-    <div className='pt-12 px-20 grid grid-cols-2 gap-x-5 place-content-start max-w-[1000px]' >
+    <div className='pt-20 px-20 grid grid-cols-2 gap-x-5 place-content-start max-w-[1000px]' >
       <div>
 
         <Image src={pd?.image_urls[0] || ''} width={500}
