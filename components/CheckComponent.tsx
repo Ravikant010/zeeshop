@@ -1,5 +1,7 @@
+// CheckComponent.tsx
 "use client"
-import React, { useState } from 'react';
+
+import React, { useState, useTransition } from 'react';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -17,9 +19,16 @@ interface Props {
   } | null;
   userId: number;
   pdId: string;
+  handleCreateAddress: (address: {
+    streetAddress: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  }) => Promise<void>
 }
 
-export  function CheckComponent({ user_address, userId, pdId }: Props){
+export function CheckComponent({ user_address, userId, pdId, handleCreateAddress }: Props) {
   const [selectedAddress, setSelectedAddress] = useState<"existing" | "new" | ''>('');
   const [newAddress, setNewAddress] = useState({
     streetAddress: '',
@@ -28,6 +37,7 @@ export  function CheckComponent({ user_address, userId, pdId }: Props){
     postalCode: '',
     country: ''
   });
+  const [isPending, startTransition] = useTransition();
 
   const handleAddressSelection = (type: "existing" | "new") => {
     setSelectedAddress(type);
@@ -42,6 +52,19 @@ export  function CheckComponent({ user_address, userId, pdId }: Props){
     console.log("Submitting address:", selectedAddress === "new" ? newAddress : user_address);
     console.log("User ID:", userId);
     console.log("Product ID:", pdId);
+  
+    startTransition(() => {
+      handleCreateAddress(selectedAddress === "new" ? newAddress : user_address!)
+        .then(() => {
+          // Handle successful address creation
+          console.log("Address created successfully");
+          // You might want to redirect or update UI here
+        })
+        .catch((error) => {
+          // Handle error
+          console.error("Error creating address:", error);
+        });
+    });
   }
 
   return (
@@ -117,8 +140,11 @@ export  function CheckComponent({ user_address, userId, pdId }: Props){
           )}
         </CardContent>
         <CardFooter>
-          
-         <Link href= {`/product/payment/${pdId}`} className="w-full "> <Button onClick={handleSubmit} className="w-full">Proceed to Payment</Button></Link>
+          <Link href={`/product/payment/${pdId}`} className="w-full ">
+            <Button onClick={handleSubmit} className="w-full" disabled={isPending}>
+              {isPending ? 'Processing...' : 'Proceed to Payment'}
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </div>
