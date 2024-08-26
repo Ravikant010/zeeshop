@@ -1,6 +1,4 @@
-
-import React, { useEffect, useState } from 'react'
-import { extractRating } from '@/lib/extracRating'
+import React from 'react'
 import { SlashIcon } from "@radix-ui/react-icons"
 import {
   Breadcrumb,
@@ -10,18 +8,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Button } from '@/components/ui/button'
-import { index } from 'drizzle-orm/mysql-core'
-import Link from 'next/link'
 import { getItemsByBrands } from '@/fetch/fetchAPIS'
 import { Product } from '@/interfaces/interface'
 import { Item } from '@/components/Item'
-type Props = {}
-function BreadcrumbWithCustomSeparator({ brand }: {
-  brand: string
-}) {
+
+function BreadcrumbWithCustomSeparator({ brand }: { brand: string }) {
   return (
-    <Breadcrumb className='my-4 ml-2'>
+    <Breadcrumb className='my-4 mx-4 sm:mx-6 md:mx-8'>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -30,7 +23,7 @@ function BreadcrumbWithCustomSeparator({ brand }: {
           <SlashIcon />
         </BreadcrumbSeparator>
         <BreadcrumbItem>
-          <BreadcrumbLink href="#" >Brand</BreadcrumbLink>
+          <BreadcrumbLink href="#">Brand</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator>
           <SlashIcon />
@@ -42,15 +35,18 @@ function BreadcrumbWithCustomSeparator({ brand }: {
     </Breadcrumb>
   )
 }
+
 export default async function Page({ params }: { params: { slug: string } }) {
-  const ItemsByBrand =  await getItemsByBrands(params.slug)
-  return (<main className='pt-12 h-screen w-full'>
-    <BreadcrumbWithCustomSeparator brand={params?.slug?.replace(/%20/g, ' ')} />
-    <section className="flex flex-col md:grid sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 w-full border border-black border-t-0">
-      {
-        ItemsByBrand.length > 0  && ItemsByBrand?.map((e:Product, index:number) => <Item key={index} product={e} />)
-      }
-    </section>
-  </main>
+  const ItemsByBrand = await getItemsByBrands(params.slug)
+
+  return (
+    <main className='pt-12 min-h-screen w-full px-4 sm:px-6 md:px-8'>
+      <BreadcrumbWithCustomSeparator brand={params?.slug?.replace(/%20/g, ' ')} />
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full">
+        {ItemsByBrand.length > 0 && ItemsByBrand?.map((e: Product, index: number) => (
+          <Item key={index} product={e} />
+        ))}
+      </section>
+    </main>
   )
 }

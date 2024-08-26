@@ -43,7 +43,7 @@ if(!user)
       </div>
       <div className="bg-[url('https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/25756908/2024/3/8/5d2c2c76-e897-4f53-9435-5ade656700391709875789093-Levis-Men-Jeans-5171709875788624-4.jpg')] md:inline-block hidden w-full h-full bg-cover bg-no-repeat"></div>
     </section>
-<MidBar />
+{/* <MidBar /> */}
 <section className="flex flex-col md:grid sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 w-full border border-black border-t-0">
       {items && items.map((product: Product, index: number) => (
         <Item key={product.product_id || index} product={product} />
@@ -55,13 +55,13 @@ if(!user)
       <div className="w-full bg-red-500"></div>
       <div className="w-full bg-red-500"></div>
     </section> */}
-    <section className="flex overflow-hidden w-full items-center bg-red-200"
+    <section className="flex overflow-hidden w-full items-center "
     >
       {Brands && Brands.map((e:string) => (
         <span key={e} className="mx-4 w-fit whitespace-nowrap">{e}</span>
       ))}
     </section>
-    <footer className="w-full h-72 bg-red-300 grid grid-cols-3 ">
+    <footer className="w-full h-72 grid grid-cols-3 ">
       <div className="bg-[#678d58] flex flex-col justify-around py-10 px-4 border-r-[1px] border-black">
         <p>zeeshop</p>
         <p>New Delhi</p>

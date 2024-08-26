@@ -8,19 +8,18 @@ import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { SignIn } from "@/components/sign-in";
 import { signInAction } from "./action";
+
 type Props = {}
+
 const formSchema = z.object({
     password: z
         .string()
@@ -31,6 +30,7 @@ const formSchema = z.object({
         .min(5)
         .max(255),
 });
+
 export default function Page({ }: Props) {
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -39,48 +39,61 @@ export default function Page({ }: Props) {
             password: "",
         },
     });
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         await signInAction(values.email, values.password)
     }
+
     return (
-        <div className="flex justify-center items-center h-screen flex-col space-y-4 text-start">
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem className="w-[400px]">
-                                <FormLabel className="">email</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="email" {...field} className="py-4" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem className="w-[400px] ">
-                                <FormLabel className="">password</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="password" {...field} className="py-4" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <Link className="capitalize   " href= "/forget-password">forget password</Link>
-                    <Button type="submit" className="w-full h-10">Submit</Button>
-                </form>
-            </Form>
-            <Link href="/sign-up" className="capitalize">Create a New Account</Link>
-            <Separator className="w-[400px]" />
-            {/* <div className="flex flex-col w-[400px]">
-                <SignIn />
-            </div> */}
+        <div className="flex justify-center items-center min-h-screen py-8 px-4">
+            <div className="w-full max-w-md space-y-6">
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Email" {...field} className="py-2" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input type="password" placeholder="Password" {...field} className="py-2" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div className="flex justify-between items-center">
+                            <Link className="text-sm text-blue-600 hover:underline" href="/forget-password">
+                                Forgot password?
+                            </Link>
+                        </div>
+                        <Button type="submit" className="w-full">Sign In</Button>
+                    </form>
+                </Form>
+                <div className="text-center">
+                    <Link href="/sign-up" className="text-sm text-blue-600 hover:underline">
+                        Create a New Account
+                    </Link>
+                </div>
+                <Separator />
+                {/* You can uncomment and add your SignIn component here if needed */}
+                {/* <div className="flex flex-col">
+                    <SignIn />
+                </div> */}
+            </div>
         </div>
     )
 }
