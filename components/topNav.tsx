@@ -55,7 +55,7 @@ function TopNav({username, userId, imageBase64}: Props) {
                 <Link href={item.link} key={item.name}>{item.name}</Link>
             )}
             <Link href='/account'>
-              <UserAvatar username={username} userId={userId} imageBase64={imageBase64}/>
+              {userId && <UserAvatar username={username} userId={userId} imageBase64={imageBase64}/>}
             </Link>
           </div>
         ) : (

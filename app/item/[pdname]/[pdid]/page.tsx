@@ -9,13 +9,15 @@ import { Item } from '@/components/Item'
 import { Comment, Product } from '@/interfaces/interface'
 import Quantity from '@/components/quantity'
 import { SizeSelector } from '@/components/Sizes'
+import AddToCart from '@/components/AddToCart'
+import { getCurrentUser } from '@/lib/session'
 
 type Props = { params: { pdname: string, pdid: string } }
 
 export default async function Page({ params }: Props) {
     const pd: Product = await getItemById('', params.pdid)
     const ItemsByBrands = await getItemsByBrands(pd.brand)
-
+    const user = await getCurrentUser()
     return (
         <div className='pt-12 px-4 sm:px-6 lg:px-8'>
             <BreadcrumbComponent category={''} item={pd.pdp_name} />
@@ -37,9 +39,11 @@ export default async function Page({ params }: Props) {
                     <div className='text-xl sm:text-2xl lg:text-3xl my-4'>{pd.price}</div>
                     <SizeSelector sizes={pd.sizes} />
                     <Quantity />
-                    <div className='grid grid-cols-2 gap-4 mt-6'>
-                        <Button className='py-4 sm:py-6 font-semibold'>Add To Cart</Button>
-                        <Button className='py-4 sm:py-6 font-semibold w-full'>Buy</Button>
+                    <div className='grid grid-cols-2 gap-2 mt-6'>
+                        <AddToCart pd_name={pd.pdp_name} pdId={pd.product_id} userId = {user?.id!!} />
+                        <Link href={`/address/${pd.product_id}`} className='w-full'>
+
+                            <Button className='py-6 font-semibold w-full'>Buy</Button></Link>
                     </div>
                     <div className='mt-6 text-lg sm:text-xl py-2 font-semibold'>product details</div>
                     <Separator orientation='horizontal' />

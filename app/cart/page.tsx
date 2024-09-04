@@ -100,7 +100,7 @@
 //     </div>
 //   )
 // }
-
+"use server"
 import React from 'react'
 import CartPage from './cartCp'
 import { getCartItems } from '@/data-access/cart'
@@ -112,7 +112,7 @@ type Props = {}
 export default async function page({}: Props) {
   const user = await getCurrentUser()
   if(!user)
-    return redirect('/login')
+    return redirect('/sign-in')
   
   const cartItems = await getCartItems(user.id)
   console.log(cartItems)

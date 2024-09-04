@@ -9,17 +9,15 @@ type Props = {
 
 export async function ServerComponentTopNavBar() {
   const user = await getCurrentUser() as { username: string, id: number }
-  console.log(user, "user")
-  if (!user)
-    return null
+  let image; 
   // const {username, id} = user
-
+if(user){
   const profile = await getProfile(user.id)
-  const { image } = profile
-
+  image = profile.image
+}
   // If children is a function, call it with the props
 
 
   // Otherwise, just render the children
-  return <TopNav username={user?.username as string} userId={user.id} imageBase64={image || ''} />
+  return <TopNav username={user?.username as string} userId={user?.id} imageBase64={image || ''} />
 }

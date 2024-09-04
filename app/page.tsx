@@ -14,8 +14,8 @@ export default async function Home() {
   // const session = await auth()
   const user = await getCurrentUser();
 
-if(!user)
-  return redirect("/sign-in")
+// if(!user)
+//   return redirect("/sign-in")
 
   const Brands = await getBrands()
   const items = await getFeedItems()

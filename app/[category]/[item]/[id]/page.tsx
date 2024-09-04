@@ -19,8 +19,8 @@ export default async function Page({ params }: Props) {
     const pd: Product = await getItemById(params.category, params.id)
     const ItemByCategory = await getItemByCategory(params.category)
     const user = await getCurrentUser()
-    if(!user)
-        return redirect("/login")
+    // if(!user)
+    //     return redirect("/login")
     if(!pd)
         return <>loading</>
     return (
@@ -49,7 +49,7 @@ export default async function Page({ params }: Props) {
 
                     <Quantity />
                     <div className='grid grid-cols-2 gap-2 mt-6'>
-                        <AddToCart pd_name={pd.pdp_name} pdId={pd.product_id} userId = {user.id} />
+                        <AddToCart pd_name={pd.pdp_name} pdId={pd.product_id} userId = {user?.id!!} />
                         <Link href={`/address/${pd.product_id}`} className='w-full'>
 
                             <Button className='py-6 font-semibold w-full'>Buy</Button></Link>
