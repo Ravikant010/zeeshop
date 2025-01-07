@@ -1,265 +1,295 @@
-"use client";
+"use client"
+import React, { useState, useRef } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-
 import Link from "next/link";
-// Ensure this path is correct
- const formSchema = z.object({
-	username: z.string()
-	  .min(3, "Username must be at least 3 characters long")
-	  .max(30, "Username must not exceed 30 characters")
-	  .regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores"),
-	
-	email: z.string()
-	  .email("Invalid email address"),
-	
-	password: z.string()
-	  .min(8, "Password must be at least 8 characters long")
-	  .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 
-		"Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
-	
-	dob: z.string()
-
-	  .refine((dob) => {
-		const date = new Date(dob);
-		return !isNaN(date.getTime());
-	  }, "Invalid date format. Please use YYYY-MM-DD")
-	 
-  });
-export default function Page() {
-    const router = useRouter()
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            username: "",
-            email: "",
-            password: "",
-            dob: '',
-        },
-    });
-    const [profile, setProfile] = useState(false);
-    // function onSubmit(values: z.infer<typeof formSchema>) {
- 
-    // }
-    const setDate = (date: Date) => {
-        const dateString = date.toISOString().split('T')[0];
-        form.setValue('dob', dateString);
-        console.log(form.getValues('dob'))
-    };
-    const userProfileRef = React.useRef<HTMLInputElement | null>(null)
-    function InvokeImageINput() {
-        if (userProfileRef.current) {
-            userProfileRef.current.click()
-        }
-    }
-    const [userProfileAsFile, setUserProfileAsFile] = useState<File | null>(null)
-    const [userProfile, setUserProfile] = useState<{ name: string, base64: string }[] | null>(null);
-    function userImageInputOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-        if (event.target.files) {
-            const filesArray = Array.from(event.target.files);
-            setUserProfileAsFile(event.target.files[0])
-            const filesWithBase64: { name: string, base64: string }[] = [];
-            filesArray.forEach(file => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onloadend = () => {
-                    filesWithBase64.push({ name: file.name, base64: reader.result as string });
-                    if (filesWithBase64.length === filesArray.length) {
-                        setUserProfile(filesWithBase64);
-                     
-                        console.log(filesWithBase64);
-                    }
-                };
-            });
-        }
-    }
-     async function onSubmit(values: z.infer<typeof formSchema>) {
-      
-        try {
-            if (!userProfile || !userProfile[0] || !userProfile[0].base64) {
-                throw new Error('User profile image is missing');
-              }
-         const user_id =  await signUpAction({...values,image:userProfile[0].base64});
-         if(user_id)
-return router.push(afterLoginUrl)
-
-        } catch (error) {
-          console.error('Unexpected error:', error);
-          // Handle unexpected errors
-        }
-    }
-
-    React.useEffect(() => {
-        console.log(userProfile)
-    }, [userProfile])
-    if (profile)
-        return <div className="flex justify-center items-center flex-col h-screen ">
-            <div className="flex flex-col w-fit space-y-4 ">
-                <div className=" p-2  rounded-2xl border-red-600 min-w-[300px] h-auto flex justify-start items-center w-auto ">
-                    <div className="w-20 h-20 rounded-full border border-black mr-4 flex justify-center items-center cursor-default" onClick={InvokeImageINput}>
-                        {userProfile ? <img src={userProfile[0].base64} className="h-full w-full rounded-full object-cover" /> :
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={28} height={28} color={"#9b9b9b"} fill={"none"}>
-                                <path d="M7 6.00049C5.77936 6.00415 5.10383 6.03335 4.54873 6.26634C3.7712 6.59269 3.13801 7.19552 2.76811 7.96158C2.46618 8.58687 2.41677 9.38799 2.31796 10.9902L2.16312 13.5009C1.91739 17.4853 1.79452 19.4775 2.96369 20.7388C4.13285 22 6.10252 22 10.0419 22H13.9581C17.8975 22 19.8672 22 21.0363 20.7388C22.2055 19.4775 22.0826 17.4853 21.8369 13.5009L21.682 10.9902C21.5832 9.38799 21.5338 8.58687 21.2319 7.96158C20.862 7.19552 20.2288 6.59269 19.4513 6.26634C18.8962 6.03335 18.2206 6.00415 17 6.00049" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                                <path d="M17 7L16.1142 4.78543C15.732 3.82996 15.3994 2.7461 14.4166 2.25955C13.8924 2 13.2616 2 12 2C10.7384 2 10.1076 2 9.58335 2.25955C8.6006 2.7461 8.26801 3.82996 7.88583 4.78543L7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                <path d="M15.5 14C15.5 15.933 13.933 17.5 12 17.5C10.067 17.5 8.5 15.933 8.5 14C8.5 12.067 10.067 10.5 12 10.5C13.933 10.5 15.5 12.067 15.5 14Z" stroke="currentColor" strokeWidth="1.5" />
-                                <path d="M11.9998 6H12.0088" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        }
-                    </div>
-                    {!userProfile ? "upload profile picture" : form.getValues('username')}
-                </div>
-                <div className="w-full flex justify-between items-center flex-col space-y-4">
-                    {!userProfile ? <Button className="w-full" >Skip</Button> :
-                        <Button className="w-full h-10"onClick={()=>{
-                                    onSubmit(form.getValues())
-                                    console.log(form.getValues())
-                        }} >Submit</Button>
-                    }
-                </div>
-            </div>
-            <Input type="file" accept="image" className="hidden" ref={userProfileRef} onChange={userImageInputOnChange} />
-        </div>
-    return (
-        <div className="flex justify-center items-center h-screen flex-col space-y-4 text-start">
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(()=>setProfile(true))} className="space-y-4">
-                    <FormField
-                        control={form.control}
-                        name="username"
-                        render={({ field }) => (
-                            <FormItem className="w-[400px]">
-                                <FormLabel className="">Username</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Username" {...field} className="py-4" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem className="w-[400px]">
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Email" {...field} className="py-4" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <div>
-                        <label className="text-[14px]">DOB</label>
-                        <DatePickerDemo setDate={setDate} />
-                    </div>
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem className="w-[400px]">
-                                <FormLabel>Password</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Password" {...field} className="py-4" type="password" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <Button type="submit" className="w-full h-10 py-4">Submit</Button>
-                </form>
-            </Form>
-            {/* <Link href="/sign-in" className="mt-4">Create A New Account</Link> */}
-        </div>
-    );
-}
-import * as React from "react";
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useRouter } from 'next/navigation';
+import Image from "next/image";
 import { Calendar } from "@/components/ui/calendar";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
-
-import { signUpAction } from "./action";
-import { useRouter } from 'next/navigation'
+import { cn } from "@/lib/utils";
+import { signUpAction } from './action';
 import { afterLoginUrl } from "@/lib/app-config";
 
+const formSchema = z.object({
+  username: z.string()
+    .min(3, "Username must be at least 3 characters long")
+    .max(30, "Username must not exceed 30 characters")
+    .regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores"),
+  email: z.string()
+    .email("Invalid email address"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters long")
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 
+      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
+  dob: z.string()
+    .refine((dob) => {
+      const date = new Date(dob);
+      return !isNaN(date.getTime());
+    }, "Invalid date format")
+});
 
- function DatePickerDemo({ setDate }: {
-    setDate: (date: Date) => void
-}) {
-    const [date, setDate_] = React.useState<Date>();
-    React.useEffect(() => {
-        if (date) setDate(date);
-    }, [date]);
+export default function SignupPage() {
+  const router = useRouter();
+  const [showProfileUpload, setShowProfileUpload] = useState(false);
+  const [userProfile, setUserProfile] = useState<{ name: string, base64: string }[] | null>(null);
+  const userProfileRef = useRef<HTMLInputElement | null>(null);
+  const [date, setDate] = useState<Date>();
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      dob: "",
+    },
+  });
+
+  const handleDateSelect = (selectedDate: Date) => {
+    setDate(selectedDate);
+    form.setValue('dob', selectedDate.toISOString().split('T')[0]);
+  };
+
+  function invokeImageInput() {
+    if (userProfileRef.current) {
+      userProfileRef.current.click();
+    }
+  }
+
+  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (event.target.files) {
+      const filesArray = Array.from(event.target.files);
+      const filesWithBase64: { name: string, base64: string }[] = [];
+      
+      filesArray.forEach(file => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          filesWithBase64.push({ name: file.name, base64: reader.result as string });
+          if (filesWithBase64.length === filesArray.length) {
+            setUserProfile(filesWithBase64);
+          }
+        };
+      });
+    }
+  }
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!showProfileUpload) {
+      setShowProfileUpload(true);
+      return;
+    }
+
+    try {
+      if (!userProfile?.[0]?.base64) {
+        throw new Error('Please upload a profile image');
+      }
+      
+      const user_id = await signUpAction({
+        ...values,
+        image: userProfile[0].base64
+      });
+      
+      if (user_id) {
+        router.push(afterLoginUrl);
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      form.setError('root', { message: 'An unexpected error occurred' });
+    }
+  }
+
+  if (showProfileUpload) {
     return (
-        <Popover>
-            <PopoverTrigger asChild>
-                <Button
-                    variant={"outline"}
-                    className={cn(
-                        "w-full justify-start text-left font-normal h-10 py-4",
-                        !date && "text-muted-foreground py-4 h-10"
-                    )}
-                >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-                <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate_}
-                    initialFocus
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold">Complete Your Profile</h2>
+            <p className="mt-2 text-gray-600">Add a profile picture to continue</p>
+          </div>
+          
+          <div className="flex flex-col items-center space-y-6">
+            <div 
+              onClick={invokeImageInput}
+              className="w-32 h-32 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:border-indigo-500 transition-colors"
+            >
+              {userProfile ? (
+                <img 
+                  src={userProfile[0].base64} 
+                  className="h-full w-full rounded-full object-cover"
+                  alt="Profile preview" 
                 />
-            </PopoverContent>
-        </Popover>
+              ) : (
+                <div className="text-gray-400">
+                  <CalendarIcon className="w-12 h-12" />
+                  <span className="text-sm mt-2">Upload Photo</span>
+                </div>
+              )}
+            </div>
+            
+            <div className="w-full space-y-4">
+              <Button 
+                onClick={() => onSubmit(form.getValues())}
+                className="w-full"
+              >
+                Complete Signup
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => onSubmit(form.getValues())}
+                className="w-full"
+              >
+                Skip for now
+              </Button>
+            </div>
+          </div>
+          
+          <Input 
+            type="file" 
+            accept="image/*"
+            className="hidden"
+            ref={userProfileRef}
+            onChange={handleImageChange}
+          />
+        </div>
+      </div>
     );
+  }
+
+  return (
+    <div className="flex min-h-screen">
+      <div className="hidden lg:flex lg:w-1/2 bg-cover bg-center">
+        <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1613909671501-f9678ffc1d33?q=80&w=1970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center flex items-center justify-center">
+          <div className="text-white text-center">
+            <h1 className="text-5xl font-bold mb-4">Join Zeeshop</h1>
+            <p className="text-xl">Create an account to start shopping</p>
+          </div>
+        </div>
+      </div>
+      
+      <div className="w-full lg:w-1/2 flex justify-center items-center bg-gray-50 px-6 py-12">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center">
+            <Image src="/logo.png" alt="Zeeshop Logo" width={200} height={100} className="mx-auto mb-4" />
+            <h2 className="text-3xl font-extrabold text-gray-900">Create your account</h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Already have an account?{' '}
+              <Link href="/sign-in" className="font-medium text-indigo-600 hover:text-indigo-500">
+                Sign in
+              </Link>
+            </p>
+          </div>
+          
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input {...field} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email address</FormLabel>
+                    <FormControl>
+                      <Input {...field} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="password" 
+                        {...field} 
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md" 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Date of Birth</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          onSelect={handleDateSelect}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <Button type="submit" className="w-full">
+                Continue
+              </Button>
+              
+              {form.formState.errors.root && (
+                <p className="text-red-500 text-sm mt-2">{form.formState.errors.root.message}</p>
+              )}
+            </form>
+          </Form>
+        </div>
+      </div>
+    </div>
+  );
 }
-
-
-// import { auth, signIn } from "@/auth"
-// import { redirect } from "next/navigation"
-// import { signup } from "./action"
-
-// export default async function SignIn() {
-
-
-//   return (
-//     <form
-//       action={signup}>
-//       <label htmlFor="username">Username</label>
-// 				<input name="username" id="username" />
-// 				<br />
-// 				<label htmlFor="password">Password</label>
-// 				<input type="password" name="password" id="password" />
-// 				<br />
-// 				<button>Continue</button>
-    
-//     </form>
-//   )
-// }
-
-
-
-// interface ActionResult {
-// 	error: string;
-// }
