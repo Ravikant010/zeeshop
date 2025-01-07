@@ -10,6 +10,9 @@ import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { getProfile } from "@/data-access/profile";
 import { addToCart } from "@/data-access/cart";
+import Link from "next/link";
+import { InstagramLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
+import { Mail } from "lucide-react";
 export default async function Home() {
   // const session = await auth()
   const user = await getCurrentUser();
@@ -41,7 +44,7 @@ export default async function Home() {
           The Active collection deliberately resists the current industry aesthetics of technical eye wear. We create sunglasses with meticulous craftsmanship to perform in sport and to transcend it. We want athletes of all levels to own versatile eye wear that emboldens personal style while enhancing movement from the saddle to the city, trail to town, or racing to relaxing.
         </p>
       </div>
-      <div className="bg-[url('https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/25756908/2024/3/8/5d2c2c76-e897-4f53-9435-5ade656700391709875789093-Levis-Men-Jeans-5171709875788624-4.jpg')] md:inline-block hidden w-full h-full bg-cover bg-no-repeat"></div>
+      <div className="bg-[url('https://images.unsplash.com/photo-1659735636797-3af40dc61131?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] md:inline-block hidden w-full h-full bg-cover bg-no-repeat bg-center"></div>
     </section>
 {/* <MidBar /> */}
 <section className="flex flex-col md:grid sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 w-full border border-black border-t-0">
@@ -61,27 +64,213 @@ export default async function Home() {
         <span key={e} className="mx-4 w-fit whitespace-nowrap">{e}</span>
       ))}
     </section>
-    <footer className="w-full h-72 grid grid-cols-3 ">
-      <div className="bg-[#678d58] flex flex-col justify-around py-10 px-4 border-r-[1px] border-black">
-        <p>zeeshop</p>
-        <p>New Delhi</p>
-        <p>8826749252</p>
-        <code>ravikantyadav435@gmail.com</code>
+ 
+    <footer className="w-full bg-[#678d58] text-white">
+      <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="flex flex-col justify-between">
+          <div>
+            <h2 className="text-2xl font-bold mb-4">zeeshop</h2>
+            <p className="mb-2">New Delhi</p>
+          </div>
+          <a 
+            href="mailto:ravikantyadav435@gmail.com" 
+            className="inline-flex items-center hover:text-gray-200 transition-colors"
+          >
+            <Mail className="mr-2 h-4 w-4" />
+            ravikantyadav435@gmail.com
+          </a>
+        </div>
+        
+        <div>
+          <h3 className="text-xl font-semibold mb-4">About</h3>
+          <ul className="space-y-2">
+            {['About', 'Terms & Conditions', 'Find Us', 'Stories'].map((item) => (
+              <li key={item}>
+                <Link href="#" className="hover:text-gray-200 transition-colors">
+                  {item}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Connect</h3>
+          <ul className="space-y-2">
+            <li>
+              <Link href="#" className="inline-flex items-center hover:text-gray-200 transition-colors">
+                <InstagramLogoIcon className="mr-2 h-4 w-4" />
+                Instagram
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="inline-flex items-center hover:text-gray-200 transition-colors">
+                <TwitterLogoIcon className="mr-2 h-4 w-4" />
+                X
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="inline-flex items-center hover:text-gray-200 transition-colors">
+                <Mail className="mr-2 h-4 w-4" />
+                Email
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div className="bg-[#678d58] flex flex-col justify-around py-10 px-4 border-r-[1px] border-black">
-        <h3 className="mb-4">About</h3>
-        <p>About</p>
-        <p>Terms & Conditions</p>
-        <p>Find Us</p>
-        <p>Stories</p>
-      </div>
-      <div className="bg-[#678d58] flex flex-col justify-start py-10 px-4 border-r-[1px] border-black">
-        <h3 className="mb-4">Connect</h3>
-        <p>Instagram</p>
-        <p>X</p>
-        <p>Email</p>
+      <div className="border-t border-white/10 py-6 text-center text-sm">
+        <p>&copy; {new Date().getFullYear()} zeeshop. All rights reserved.</p>
       </div>
     </footer>
   </main>
 );
 }
+
+// import { NavbarDemo } from "@/components/navbar";
+// import { Button } from "@/components/ui/button";
+// import React from "react";
+// import Link from "next/link";
+// import { Instagram, Mail, Twitter } from "lucide-react";
+
+// type Props = {};
+
+// export default function page({}: Props) {
+//   return (
+//     <div className="bg-[#E6E9E4] h-auto">
+//       <NavbarDemo/>
+//       {/* <div className="w-full flex h-16 items-center">
+//         <div>Logo</div>
+//         <div className="flex flex-1 justify-center rounded-2xl border-2 h-1/2"></div>
+//         <div>login</div>
+//       </div> */}
+
+//       <div className="bg-[url('/bg.png')] h-[800px] w-full bg-cover bg-center  flex items-center justify-center ">
+//         <div className="flex-col flex lg:max-w-screen-lg text-center font-della text-white">
+//           <p className=" self-center m-auto  text-[8rem]">ZeeShop</p>
+//           <p className="text-2xl tracking-normal">
+//             your ultimate destination for premium fashion. We curate an
+//             extensive collection of world-renowned brands and cutting-edge
+//             styles, making fashion accessible to everyone who values quality and
+//             style.
+//           </p>
+//         </div>
+//       </div>
+//       <section className="flex flex-col">
+//         {["collections", "arrivals", "seasonal"].map((e) => (
+//           <div
+//             className="w-full flex h-[1000px] items-center capitalize justify-center"
+//             key={e}
+//           >
+//             <div className="font-della text-[4rem] self-center align-middle">
+//               {e}
+//             </div>
+//           </div>
+//         ))}
+//       </section>
+
+//       <section>
+// <div className="w-full h-auto flex flex-col">
+// {
+//   ["women", "men", "kids"].map(e=><div className="h-[1000px] bg-red-500 flex justify-between mb-2"> <div className=" w-1/2 items-start flex flex-col justify-center text-[4rem] mx-10" >
+//     {e}
+
+//  <div className="text-lg">
+//  ultimate destination for all things fashion-forward and timeless. Explore a curated range of clothing, footwear, accessories, and more, designed to celebrate every woman's individuality. From chic casual wear to elegant evening outfits, we have everything you need to elevate your wardrobe
+//  </div> 
+
+ 
+//  <Button variant={"outline"} className="rounded-full text-lg px-10 py-6  align-bottom place-items-end mt-10">View</Button>
+ 
+//  </div>
+ 
+//  <div className="bg-blue-300 h-full w-1/2">dfd</div></div>)
+// }
+// </div>
+
+//       </section>
+
+//       <section className="h-[1000px] ">
+//         <div className="text-center text-[4rem]">
+//           Brands
+//         </div>
+
+//       </section>
+
+//       <footer className="py-20 bg-gray-100">
+//         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+//           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+//             <div className="scroll-reveal">
+//               <h3 className="text-xl font-light mb-6">About ZeeShop</h3>
+//               <p className="text-gray-600">
+//                 Curating the finest in fashion since 2024. We believe in
+//                 quality, style, and sustainability.
+//               </p>
+//             </div>
+//             <div className="scroll-reveal">
+//               <h3 className="text-xl font-light mb-6">Quick Links</h3>
+//               <ul className="space-y-4">
+//                 <li>
+//                   <a href="#" className="text-gray-600 hover:text-black">
+//                     New Arrivals
+//                   </a>
+//                 </li>
+//                 <li>
+//                   <a href="#" className="text-gray-600 hover:text-black">
+//                     Best Sellers
+//                   </a>
+//                 </li>
+//                 <li>
+//                   <a href="#" className="text-gray-600 hover:text-black">
+//                     Our Story
+//                   </a>
+//                 </li>
+//                 <li>
+//                   <a href="#" className="text-gray-600 hover:text-black">
+//                     Contact
+//                   </a>
+//                 </li>
+//               </ul>
+//             </div>
+//             <div className="scroll-reveal">
+//               <h3 className="text-xl font-light mb-6">Customer Care</h3>
+//               <ul className="space-y-4">
+//                 <li>
+//                   <a href="#" className="text-gray-600 hover:text-black">
+//                     Shipping Info
+//                   </a>
+//                 </li>
+//                 <li>
+//                   <a href="#" className="text-gray-600 hover:text-black">
+//                     Returns
+//                   </a>
+//                 </li>
+//                 <li>
+//                   <a href="#" className="text-gray-600 hover:text-black">
+//                     Size Guide
+//                   </a>
+//                 </li>
+//                 <li>
+//                   <a href="#" className="text-gray-600 hover:text-black">
+//                     FAQ
+//                   </a>
+//                 </li>
+//               </ul>
+//             </div>
+//             <div className="scroll-reveal">
+//               <h3 className="text-xl font-light mb-6">Contact Us</h3>
+//               <ul className="space-y-4 text-gray-600">
+//                 <li>1234 Fashion Street</li>
+//                 <li>New York, NY 10001</li>
+//                 <li>contact@zeeshop.com</li>
+//                 <li>+1 (234) 567-8900</li>
+//               </ul>
+//             </div>
+//           </div>
+//           <div className="border-t border-gray-200 mt-16 pt-8 text-center text-gray-600">
+//             <p>&copy; 2024 ZeeShop. All rights reserved.</p>
+//           </div>
+//         </div>
+//       </footer>
+//     </div>
+//   );
+// }

@@ -33,5 +33,5 @@ yarn-error.log*
 .env
 # typescript
 *.tsbuildinfo
-drizzle.config.ts
+#drizzle.config.ts
 next-env.d.ts
