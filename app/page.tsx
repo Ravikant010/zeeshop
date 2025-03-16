@@ -13,6 +13,7 @@ import { addToCart } from "@/data-access/cart";
 import Link from "next/link";
 import { InstagramLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 import { Mail } from "lucide-react";
+import Footer from "@/components/footer";
 export default async function Home() {
   // const session = await auth()
   const user = await getCurrentUser();
@@ -65,63 +66,7 @@ export default async function Home() {
       ))}
     </section>
  
-    <footer className="w-full bg-[#678d58] text-white">
-      <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="flex flex-col justify-between">
-          <div>
-            <h2 className="text-2xl font-bold mb-4">zeeshop</h2>
-            <p className="mb-2">New Delhi</p>
-          </div>
-          <a 
-            href="mailto:ravikantyadav435@gmail.com" 
-            className="inline-flex items-center hover:text-gray-200 transition-colors"
-          >
-            <Mail className="mr-2 h-4 w-4" />
-            ravikantyadav435@gmail.com
-          </a>
-        </div>
-        
-        <div>
-          <h3 className="text-xl font-semibold mb-4">About</h3>
-          <ul className="space-y-2">
-            {['About', 'Terms & Conditions', 'Find Us', 'Stories'].map((item) => (
-              <li key={item}>
-                <Link href="#" className="hover:text-gray-200 transition-colors">
-                  {item}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        
-        <div>
-          <h3 className="text-xl font-semibold mb-4">Connect</h3>
-          <ul className="space-y-2">
-            <li>
-              <Link href="#" className="inline-flex items-center hover:text-gray-200 transition-colors">
-                <InstagramLogoIcon className="mr-2 h-4 w-4" />
-                Instagram
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="inline-flex items-center hover:text-gray-200 transition-colors">
-                <TwitterLogoIcon className="mr-2 h-4 w-4" />
-                X
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="inline-flex items-center hover:text-gray-200 transition-colors">
-                <Mail className="mr-2 h-4 w-4" />
-                Email
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="border-t border-white/10 py-6 text-center text-sm">
-        <p>&copy; {new Date().getFullYear()} zeeshop. All rights reserved.</p>
-      </div>
-    </footer>
+  <Footer/>
   </main>
 );
 }
