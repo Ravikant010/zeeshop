@@ -51,7 +51,7 @@ export default function SignupPage() {
   const [showProfileUpload, setShowProfileUpload] = useState(false);
   const [userProfile, setUserProfile] = useState<{ name: string, base64: string }[] | null>(null);
   const userProfileRef = useRef<HTMLInputElement | null>(null);
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date>(new Date());
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -63,9 +63,13 @@ export default function SignupPage() {
     },
   });
 
-  const handleDateSelect = (selectedDate: Date) => {
-    setDate(selectedDate);
-    form.setValue('dob', selectedDate.toISOString().split('T')[0]);
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    if (selectedDate) {
+      console.log("Selected Date:", selectedDate);
+      setDate(selectedDate); // Update the state with the selected date
+    } else {
+      console.log("No date selected");
+    }
   };
 
   function invokeImageInput() {
